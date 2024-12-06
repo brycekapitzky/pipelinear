@@ -4,10 +4,15 @@ import { Card, Input, Flex, Image, Grid, GridItem, Stack, Text, Box } from '@cha
 import { Field } from "@/components/ui/field"
 import { Button } from '@/components/ui/button'
 import { RiUserSharedLine , RiUserAddLine } from 'react-icons/ri'
+import { useRouter } from 'next/navigation';
 
 export default function LoginForm({ user_type }) {
+	const router = useRouter()
 
-	console.info( user_type )
+	const gotoDashboard = () => {
+		router.push( `/${user_type}`)
+	}
+
 	return (
 		<Grid height="100vh">
 			<GridItem>
@@ -50,7 +55,15 @@ export default function LoginForm({ user_type }) {
 								</Field>
 								<Flex direction="row" gap={2}>
 									<Flex flex={1}>
-										<Button backgroundColor="black" w="100%" color="white" py={5} variant="subtle" fontSize="12px"> <RiUserSharedLine /> Login </Button>
+										<Button
+											backgroundColor="black"
+											w="100%"
+											onClick={() => gotoDashboard()}
+											color="white"
+											py={5}
+											variant="subtle"
+											fontSize="12px"
+										> <RiUserSharedLine /> Login </Button>
 									</Flex>
 									<Flex flex={1}>
 										<Button backgroundColor="black" w="100%" color="white" variant="subtle" fontSize="12px"> <RiUserAddLine /> Sign Up </Button>
@@ -62,6 +75,5 @@ export default function LoginForm({ user_type }) {
 				</Flex>
 			</GridItem>
 		</Grid>
-
 	)
 }

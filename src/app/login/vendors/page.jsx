@@ -5,5 +5,5 @@ export const metadata = {
 };
 
 export default function LoginPage() {
-	return ( <LoginForm user_type={"vendor"} /> )
+	return ( <LoginForm user_type={"vendors"} /> )
 }
