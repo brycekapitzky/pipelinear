@@ -8,13 +8,9 @@ import { Field } from "@/components/ui/field"
 
 function InitialAgreementForm() {
 	return <Box>
-		<Text textAlign={"justify"}>
-			1. Pipelinear operates a sales team that primarily prospects cold outreach sales channels. <br />
-
-			2. We ask prospects to have deep-dive 30-min interview with us in exchange for an incentive to learn ongoing initiatives.<br />
-
-			3. We book sales meetings with target market prospects that are buying what our client's offer
-		</Text>
+		<Text textAlign={'justify'}> {`1. Pipelinear operates a sales team that primarily prospects cold outreach sales channels.`} </Text>
+		<Text textAlign={'justify'}> {`2. We ask prospects to have deep-dive 30-min interview with us in exchange for an incentive to learn ongoing initiatives.`} </Text>
+		<Text textAlign={'justify'}> {`3. We book sales meetings with target market prospects that are buying what our client's offer`} </Text>
 		<RadioGroup
 			mt={3}
 			orientation="horizontal"
