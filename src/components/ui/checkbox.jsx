@@ -10,7 +10,7 @@ export const Checkbox = React.forwardRef(function Checkbox(props, ref) {
         {icon || <ChakraCheckbox.Indicator />}
       </ChakraCheckbox.Control>
       {children != null && (
-        <ChakraCheckbox.Label>{children}</ChakraCheckbox.Label>
+        <ChakraCheckbox.Label fontSize="md">{children}</ChakraCheckbox.Label>
       )}
     </ChakraCheckbox.Root>
   )

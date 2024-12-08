@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { RiUserSharedLine, RiUserAddLine } from 'react-icons/ri'
 
 import ProspectSignup from '@/components/pages/signup/prospects/prospect-signup';
+import VendorSignUp from '@/components/pages/signup/vendors/vendor-signup';
 
 export default function SignupForm({ user_type }) {
 
@@ -71,7 +72,124 @@ This also confirms we can reach out with a quick call to clarify any details.`,
 			}
 		],
 		"vendors": [
+			{
+				name: "agreement",
+				label: `1. Pipelinear operates a sales team that primarily prospects cold outreach sales channels.
 
+2. We ask prospects to have deep-dive 30-min interview with us in exchange for an incentive to learn ongoing initiatives.
+
+3. We book sales meetings with target market prospects that are buying what our client's offer.This question is required.`,
+				type: "checkbox list",
+				choices: ['I accept',"I don't accept"]
+			},
+			{
+				name: "signup reason",
+				label: `What would you like to sign up for?`,
+				type: "checkbox list",
+				choices: ['Vendor Referral List: $279/confirmed meeting','Vendor Referral List: $499/confirmed meeting']
+			},
+			{
+				name: "full_name",
+				label: "What is your full name?",
+				placeholder: "Enter your full name",
+				type: 'text'
+			},
+			{ name: "company_name", label: "What is your company name?", placeholder: "Enter your company name" },
+			{
+				name: "email_address",
+				label: "What is the email address of the main point-of-contact?",
+				placeholder: "Enter email address",
+				type: 'email'
+			},
+			{
+				name: 'phone_number',
+				label: "What is the phone number of the main point-of-contact",
+				type: "phone",
+				placeholder: "(201) 555-0123",
+				// has a country picker at the left side
+			},
+			{
+				name: "linkedin",
+				label: `What is your linkedin profile?`,
+				placeholder: "Enter your linkedin profile",
+				type: "url"
+			},
+			{
+				name: "website",
+				label: `What is your company website?`,
+				placeholder: "Enter your company website",
+				type: "url"
+			},
+			{
+				name: "meeting_count",
+				label: `How many meetings are you expecting per month?`,
+				placeholder: "Enter number of expected meeting",
+				type: "number"
+			},
+			{
+				name: "sevices_offer",
+				label: "What are the services that you offer?",
+				placeholder: "List out the services you offer",
+				type: "textarea"
+			},
+			{
+				name: "compeling_proposition",
+				label: "What is your most compelling value proposition?",
+				placeholder: "Enter compelling value proposition",
+				type: "textarea"
+			},
+			{
+				name: "target_market",
+				label: "What is the industry that you target? Is it a hard requirement?",
+				placeholder: "List out industries",
+				type: "textarea"
+			},
+			{
+				name: "company_headcount",
+				label: "What is your ideal target's company headcount?",
+				choices: [
+					{ label: "1-10 headcount", value: "" },
+					{ label: "11-20 headcount", value: "" },
+					{ label: "21-50 headcount", value: "" },
+					{ label: "51-100 headcount", value: "" },
+					{ label: "101+ headcount", value: "" }
+				]
+			},
+			{
+				name: "job_title_target",
+				label: "What are the job titles that our team should focus on?",
+				note: "CEO, Founder, President, CMO, CTO, Director IT, etc.",
+				type: "text"
+			},
+			{
+				name: "calendly_link",
+				label: "What is the best Calendly link that we can use for this campaign?",
+				note: "A scheduling or Calendly link is required to work with us.",
+				type: "url"
+			},
+			{
+				name: "additional_parameters",
+				label: "Please specify other parameters you would like us to qualify upon prospecting",
+				type: "textarea",
+				note: "We aim to accommodate your preferences but cannot guarantee adherence to all parameters due to service line specifics and resource constraints."
+			},
+			{
+				name: "agreement",
+				label: "After this form, you will be redirected to a payment link to submit payment details. There will also be an email follow-up with the subject line of the email will say: PipeLinear Onboarding Invoice. Once fulfilled, we will launch the campaign same day!",
+				choices: [ 'I accept', "I don't accept" ]
+			},
+			{
+				name: "Terms of service & privacy policy",
+				choices: [ 'I accept', "I don't accept" ]
+			},
+			{
+				name: "expectation_alignment",
+				label: `PipeLinear offers incentives like Amazon eGift cards to prospects to have a 30 minute interview about services company goals and purchasing processes.
+
+This information is maintained in a database until we find a vendor that closely fits what our prospect is looking for, prospects may be incentivized again for a meeting or other action.`,
+				choices: [ 'I accept', "I don't accept" ],
+				note: "PipeLinear always validates confirmed interest."
+			},
 		]
 	}
 	return (
@@ -102,34 +220,7 @@ This also confirms we can reach out with a quick call to clarify any details.`,
 					>
 						<Card.Body gap={3} >
 							{
-								user_type == 'prospects' ? <ProspectSignup /> : <Stack w="full" gap={6}>
-									<Field label="What's your name ?">
-										<Input
-											p={2}
-											border="1px solid #c4c4c4"
-											placeholder='Enter your name' />
-									</Field>
-									<Field label="What's your email ?">
-										<Input
-											p={2}
-											border="1px solid #c4c4c4"
-											placeholder='Enter your email' />
-									</Field>
-									<Field label="What's your most compeling value proposition ?">
-										<Input
-											p={2}
-											border="1px solid #c4c4c4"
-											placeholder='Enter value proposition' />
-									</Field>
-									<Flex direction="row" gap={2}>
-										<Flex flex={1}>
-											<Button backgroundColor="black" w="100%" color="white" py={5} variant="subtle" fontSize="12px"> <RiUserSharedLine /> Login </Button>
-										</Flex>
-										<Flex flex={1}>
-											<Button backgroundColor="black" w="100%" color="white" variant="subtle" fontSize="12px"> <RiUserAddLine /> Sign Up </Button>
-										</Flex>
-									</Flex>
-								</Stack>
+								user_type == 'prospects' ? <ProspectSignup /> : <VendorSignUp />
 							}
 
 						</Card.Body>

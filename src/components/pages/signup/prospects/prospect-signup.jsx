@@ -148,7 +148,6 @@ export default function ProspectSignup() {
 		{ id: 2, label: "Company Profile", component: <CompanyProfileForm /> },
 		{ id: 3, label: "Hyper Vendor", component: <HyperVendorForm /> },
 	]
-	return <Stepper steps={steps}>
-	</Stepper>
+	return <Stepper steps={steps} />
 }
 
