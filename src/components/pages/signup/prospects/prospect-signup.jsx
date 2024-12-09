@@ -40,7 +40,7 @@ function CompanyProfileForm() {
 				<Input
 					p={2}
 					border="1px solid #c4c4c4"
-					placeholder='Enter your last position' />
+					placeholder='Enter your position' />
 			</Field>
 		</Flex>
 

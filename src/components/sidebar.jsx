@@ -25,6 +25,11 @@ import {
 } from 'react-icons/fa'
 
 import {
+	MdOutlineNewspaper,
+	MdOutlineAccessTime
+} from "react-icons/md";
+
+import {
 	LuUserCog
 } from 'react-icons/lu'
 
@@ -43,6 +48,14 @@ const LinkItems =
 			{ name: 'Vendors', icon: FaStore },
 			{ name: 'Proposals', icon: FaRegNewspaper },
 			{ name: 'Referrals', icon: FaHandshake },
+		],
+		'sales_manager': [
+			{ name: 'Proposal Manager', icon: FaHome },
+			{ name: 'Vendors', icon: FaStore },
+			{ name: 'Prospects', icon: FaRegNewspaper },
+			{ name: 'Meetings', icon: MdOutlineAccessTime },
+			{ name: 'Onboarding', icon: FaHome },
+			{ name: 'Posts', icon: MdOutlineNewspaper },
 		]
 	}
 

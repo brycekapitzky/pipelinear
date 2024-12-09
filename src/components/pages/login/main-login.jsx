@@ -68,7 +68,7 @@ export default function MainLogin() {
 					</Flex>
 
 					<HStack w="100%" textAlign="center" mt={5} justifyContent="center">
-						<Text> Do you work for PipeLinear? If so,</Text><Text color="blue.400" textDecoration="underline">sign in here </Text>
+						<Text> Do you work for PipeLinear? If so,</Text><Text cursor={'pointer'} color="blue.400" onClick={() => router.push('/sales')} textDecoration="underline">sign in here </Text>
 					</HStack>
 				</Flex>
 			</GridItem>

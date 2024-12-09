@@ -76,27 +76,22 @@ function CompanyDetailsForm() {
 				<Input
 					p={2}
 					border="1px solid #c4c4c4"
-					type='number'
+					type='text'
 					placeholder='Enter your linkedin profile' />
 			</Field>
 			<Field label="What is your company website?">
 				<Input
 					p={2}
 					border="1px solid #c4c4c4"
-					type='number'
+					type='text'
 					placeholder='Enter your company website' />
 			</Field>
 		</Flex>
-
-
-
 	</>
 }
 
 function MarketingDetialsForm() {
 	return <>
-
-
 		<Field
 			mt={5}
 			label="What is your most compelling value proposition?"
