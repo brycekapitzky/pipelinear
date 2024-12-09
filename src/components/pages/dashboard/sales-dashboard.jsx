@@ -4,7 +4,8 @@ import HeaderBar from "@/components/ui/header-bar"
 import { Flex, Box, Card, Text } from "@chakra-ui/react"
 import { FaPeopleGroup } from "react-icons/fa6";
 import { FaLinkedin, FaBuilding  } from "react-icons/fa";
-import { LuFactory } from "react-icons/lu";
+import { ResizableTable } from "@/components/ui/table";
+
 
 
 export default function SalesManagerDashboard() {
@@ -12,35 +13,75 @@ export default function SalesManagerDashboard() {
 	const prospects = [
 		{
 			id: 0,
-			first_name: "Lloyd",
-			company_name: "Acme Co.",
-			position: "Developer",
-			company_website: "https://google.com",
-			employees_count: 25,
+			first_name: "sdfsdf",
+			status: "Active",
+			last_name: 'sdfsdf',
+			full_name: 'sdfsdf  sdfsdfsdf',
+			position: "VP of Sales Transformation",
+			industry: 'Information Services',
+			headcount: '30000',
+			notes: `"As per sdfsdf, the sdfdsf's Asdfsdfdsf
+Company email: 
+sdfsdf.sdfsdg@nisdfsdf.com"`,
+			pitched_campaign: `"sdfsdfsdf sdfsdf sdfC sdfsdf, sdgdfgdfgdfg sdfsdf sdf sdf sd
+sdfdsgdfgdfgdfgdfg
+asdasfdsfsdfdsf
+dfgdfgdfg 
+dfgdfgdfg
+Csdfsdfsdf
+Qsdfsdf "`,
+			company_name: "sdfdsf",
+			company_description: `"ssdf sdfs dfsdfsd fsfsdfsdfsdf f adfsdf 9sdfsdfsdfsdf sdf sdf sdfhsdfsdfsdfmore insdfdsft Nsdfdsfsdf."`,
+			company_website: "https://nielseniq.com/global/en/",
+			frequency: '3 per Week for $300 Amazon eCard',
+			services: 'Training and Development, Manager Coaching, Sales Enablement',
+			date_submitted: 'April 6, 2022',
+			function: "Sales",
+			timezone: 'EST',
+			location: 'Boca Raton, Florida',
 			linkedin_profile: "https://linkedin.profile.com",
-			firms: [
-				'Growth Marketing agencies',
-				'General business consulting',
-				'Software or SaaS companies'
-			]
-		}
+			processed: 'checked',
+			created: '6/2/2022',
+			last_updated: '8/26/2024',
+			onboarding_week: '23'
+		},
 	]
 
 	for( let i = 0; i < 100 ; i ++ ) {
 		prospects.push(
 			{
-				id: i + 1,
-				first_name: "Lloyd",
-				company_name: "Acme Co.",
-				position: "Developer",
-				company_website: "https://google.com",
-				employees_count: 25,
-				linkedin_profile: "https://linkedin.profile.com",
-				firms: [
-					'Growth Marketing agencies',
-					'General business consulting',
-					'Software or SaaS companies'
-				]
+			id: i + 1,
+			first_name: "sdfsdf",
+			status: "Active",
+			last_name: 'sdfsdf',
+			full_name: 'sdfsdf  sdfsdfsdf',
+			position: "VP of Sales Transformation",
+			industry: 'Information Services',
+			headcount: '30000',
+			notes: `"As per sdfsdf, the sdfdsf's Asdfsdfdsf
+Company email: 
+sdfsdf.sdfsdg@nisdfsdf.com"`,
+			pitched_campaign: `"sdfsdfsdf sdfsdf sdfC sdfsdf, sdgdfgdfgdfg sdfsdf sdf sdf sd
+sdfdsgdfgdfgdfgdfg
+asdasfdsfsdfdsf
+dfgdfgdfg 
+dfgdfgdfg
+Csdfsdfsdf
+Qsdfsdf "`,
+			company_name: "sdfdsf",
+			company_description: `"ssdf sdfs dfsdfsd fsfsdfsdfsdf f adfsdf 9sdfsdfsdfsdf sdf sdf sdfhsdfsdfsdfmore insdfdsft Nsdfdsfsdf."`,
+			company_website: "https://nielseniq.com/global/en/",
+			frequency: '3 per Week for $300 Amazon eCard',
+			services: 'Training and Development, Manager Coaching, Sales Enablement',
+			date_submitted: 'April 6, 2022',
+			function: "Sales",
+			timezone: 'EST',
+			location: 'Boca Raton, Florida',
+			linkedin_profile: "https://linkedin.profile.com",
+			processed: 'checked',
+			created: '6/2/2022',
+			last_updated: '8/26/2024',
+			onboarding_week: '23'
 			}
 		)
 	}
@@ -57,86 +98,9 @@ export default function SalesManagerDashboard() {
 		/>
 
 		<Box mt={10}>
-			<Flex
-				flexDirection={'row'}
-				gap={5}
-				flexWrap={'wrap'}>
-				{
-					prospects.map(prospect =>
-						<SingleSalesCard
-							key={prospect.id}
-							first_name={prospect.first_name}
-							company_website={prospect.company_website}
-							company_name={prospect.company_name}
-							position={prospect.position}
-							employees_count={prospect.employees_count}
-							linkedin_profile={prospect.linkedin_profile}
-							firms={prospect.firms}
-						/>
-					)
-				}
-			</Flex>
+		<ResizableTable
+				data={ prospects }
+			/>
 		</Box>
 	</Flex>
-}
-
-const SingleSalesCard = ({
-	first_name,
-	position,
-	company_name,
-	company_website,
-	employees_count,
-	linkedin_profile,
-	firms = []
-}) => {
-	return <>
-		<Card.Root
-			variant="elevated"
-			size={'lg'}
-			width={'400px'}
-			my={3}
-			cursor={'pointer'}
-		>
-			<Card.Body>
-				<Flex
-					justifyContent={'space-between'}
-					alignItems={'baseline'}
-				>
-					<Box>
-						<Text
-							fontWeight={'bold'}
-							fontSize={'lg'}
-						> {first_name} </Text>
-						<Text
-							fontWeight={'extralight'}
-							fontSize={'xs'}
-						>
-							{company_name} | {position}
-						</Text>
-					</Box>
-					<Box>
-						<Text
-							color={'blue.500'}
-							cursor={'pointer'}
-							fontSize={'xs'}> {company_website} </Text>
-					</Box>
-				</Flex>
-
-				<Flex mt={5} flexDirection={'column'}>
-					<Flex alignItems={'center'} fontSize={18}>
-						<Box w={25}> <FaPeopleGroup /> </Box>
-						<Text ml={2} w={'100%'} fontSize={15}> {employees_count} </Text>
-					</Flex>
-					<Flex fontSize={18}>
-						<Box w={25}> <FaLinkedin /> </Box>
-						<Text ml={2} w={'100%'} fontSize={15}> {linkedin_profile} </Text>
-					</Flex>
-					<Flex fontSize={18} >
-						<Box w={25}> <FaBuilding /> </Box>
-						<Text ml={2} w={'100%'} fontSize={15} > {firms.join(',')}</Text>
-					</Flex>
-				</Flex>
-			</Card.Body>
-		</Card.Root>
-	</>
 }
