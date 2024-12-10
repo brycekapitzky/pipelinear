@@ -1,0 +1,91 @@
+datasource db {
+	provider = "postgresql"
+	url = env("DATABASE_URL")
+}
+
+generator client {
+	provider = "prisma-client-js"
+}
+
+model Proposal {
+	proposal_id							String @id @default(uuid())
+	proposal_client_id					String
+	proposal_manager_id					String
+	proposal_client_second_email		String
+	proposal_prospect_paragraph			String
+
+	sales_manager						SalesManager @relation( fields: [proposal_manager_id], references: [manager_id])
+	clients								Clients @relation( fields: [proposal_client_id], references: [client_id])
+}
+
+model SalesPost {
+	sales_post_id						String @id @default(uuid())
+
+}
+
+model Prospects {
+	prospect_id							String @id @default(uuid())
+	prospect_status						String
+	prospect_first_name					String
+	prospect_last_name					String
+	prospect_full_name					String
+	prospect_job_title					String
+	prospect_industry					String
+	prospect_headcount					Int
+	prospect_important_notes			String
+	prospect_pitched_campaigns			String
+	prospect_company_name				String
+	prospect_phone_number				String
+	prospect_email_address				String
+	prospect_company_description		String
+	prospect_website					String
+	prospect_frequency					String
+	prospect_other_services				String
+	prospect_date_submitted				DateTime
+	prospect_function					String
+	prospect_timezone					String
+	prospect_location					String
+	prospect_linkedin_profile			String
+	prospect_processed					Boolean
+	prospect_created					DateTime @default(now())
+	prospect_last_updated				DateTime
+	prospect_onboarding_week			Int
+}
+
+model SalesManager {
+	manager_id				String @id @default(uuid())
+	manager_name			String
+
+	clients					Clients[]
+	proposals				Proposal[]
+}
+
+model Clients {
+	client_id					String @id @default(uuid())
+	client_name					String
+	client_email				String
+	client_phone_number			String
+	client_website				String
+	client_calendly				String
+	client_job_title			String
+	client_headcount			Int
+	client_industry				String
+	client_main_pitch			String
+	client_onboarding_date		DateTime
+	client_cap					Int
+	client_onboarding			Boolean
+	client_intro_email			Boolean
+	client_last_updated			DateTime
+	client_week_number			Int
+	client_assigned_date		DateTime
+	client_assigned_week		Int
+	client_transcript			String
+	client_linkedin_profile		String
+	client_value_proposition	String
+	client_service_offered		String
+	client_important_notes		String
+	manager_id					String
+
+	sales_manager				SalesManager @relation( fields: [manager_id], references: [manager_id])
+	proposals					Proposal[]
+}
