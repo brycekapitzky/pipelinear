@@ -30,26 +30,26 @@ model Prospects {
 	prospect_last_name					String
 	prospect_full_name					String
 	prospect_job_title					String
-	prospect_industry					String
+	prospect_industry					String?
 	prospect_headcount					Int
 	prospect_important_notes			String
 	prospect_pitched_campaigns			String
 	prospect_company_name				String
 	prospect_phone_number				String
 	prospect_email_address				String
-	prospect_company_description		String
+	prospect_company_description		String?
 	prospect_website					String
 	prospect_frequency					String
 	prospect_other_services				String
 	prospect_date_submitted				DateTime
-	prospect_function					String
-	prospect_timezone					String
-	prospect_location					String
+	prospect_function					String?
+	prospect_timezone					String?
+	prospect_location					String?
 	prospect_linkedin_profile			String
 	prospect_processed					Boolean
 	prospect_created					DateTime @default(now())
 	prospect_last_updated				DateTime
-	prospect_onboarding_week			Int
+	prospect_onboarding_week			Int?
 }
 
 model SalesManager {
