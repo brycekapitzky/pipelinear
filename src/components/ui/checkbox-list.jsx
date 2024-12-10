@@ -6,7 +6,9 @@ export const CheckboxList = ({ items, header, getSelectedChoices, ...rest }) => 
 	const [checkedItems, setCheckedItems] = useState([]);
 
 	useEffect(() => {
-		getSelectedChoices( checkedItems )
+		if ( getSelectedChoices ) {
+			getSelectedChoices( checkedItems )
+		}
 	}, [checkedItems])
 
 	const handleCheckboxChange = (e, value) => {

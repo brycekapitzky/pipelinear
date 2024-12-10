@@ -1,16 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import { ProgressBar, ProgressRoot } from "@/components/ui/progress"
 
-const Stepper = ({
-	children,
-	steps = [
-		{ id: 1, label: "Step 1", description: "Step 1 Description", component: <> step 1 content </> },
-		{ id: 2, label: "Step 2", description: "Step 2 Description", component: <> step 2 content </>  },
-		{ id: 3, label: "Step 3", description: "Step 3 Description", component: <> step 3 content </>  },
-	]
-}) => {
+const Stepper = ({ steps, onSubmit, getCurrentStep }) => {
 	const [currentStep, setCurrentStep] = useState(1);
+	const [formData, setFormData] = useState({}); // Collect data from all steps
+
+	useEffect(() => {
+		getCurrentStep( currentStep )
+	}, [currentStep])
 
 	const handleNext = () => {
 		if (currentStep < steps.length) {
@@ -25,71 +22,48 @@ const Stepper = ({
 	};
 
 	return (
-		<Box
-			width="100%"
-			mx={{ base: "unset", md: "unset"}}
-			p={{ base: 0, md: 5 }}>
+		<Box width="100%" p={5}>
 			{/* Stepper Header */}
-
-
-			<Flex flexDirection={{ base: "row", md: "column" }}>
-				<Flex flexDirection={{ base: "column", md: 'row' }} mr={{ base: 2 , md: 0 }}>
-					{steps.map((step) => (
-						<Box key={step.id} w="100%">
-							<Text
-								fontWeight="bold"
-								mb={{ base: 8 , md: 0 }}
-								fontSize={{ base: 'xs', md: "sm" }}
-								textAlign={{ base: "start", md: "center" }}
-								color={step.id <= currentStep ? "teal.500" : "gray.500"}
-							>
-								{step.label}
-							</Text>
-							<Text
-								fontSize="sm"
-								color={step.id <= currentStep ? "teal.300" : "gray.400"}
-							>
-								{step.description}
-							</Text>
-						</Box>
-					))}
-
-
-				</Flex>
-				{/* Stepper Progress */}
-				<Flex w="100%" flexDirection="row" ml={{ base: 0, md: 2 }}>
-					<ProgressRoot
-						value={(currentStep / steps.length) * 100}
-						striped
-						animated
-						variant="outline"
-						colorPalette="teal"
-						maxW="100%">
-						<ProgressBar />
-					</ProgressRoot>
-					{/* Stepper Content */}
-					<Box w="100%" my={{ base: 0, md: 8 }} p={5} borderWidth="1px" borderRadius="md">
-						{ steps[ currentStep - 1].component }
+			<Flex mb={5} justify="space-between">
+				{steps.map((step, index) => (
+					<Box key={step.id} textAlign="center">
+						<Text
+							fontWeight="bold"
+							color={index + 1 <= currentStep ? "teal.500" : "gray.500"}
+						>
+							{step.label}
+						</Text>
+						<Text
+							fontSize="sm"
+							color={index + 1 <= currentStep ? "teal.300" : "gray.400"}
+						>
+							{step.description}
+						</Text>
 					</Box>
-				</Flex>
+				))}
 			</Flex>
 
-			{/* Stepper Navigation */}
+			{/* Step Content */}
+			<Box my={8} p={5} borderWidth="1px" borderRadius="md">
+				{
+					steps.map( step => step.component )
+				}
+			</Box>
+
+			{/* Navigation */}
 			<Flex justify="space-between">
-				<Button
-					onClick={handleBack}
-					isDisabled={currentStep === 1}
-					colorScheme="gray"
-				>
+				<Button onClick={handleBack} isDisabled={currentStep === 1} colorScheme="gray">
 					Back
 				</Button>
-				<Button
-					onClick={handleNext}
-					isDisabled={currentStep === steps.length}
-					colorScheme="teal"
-				>
-					{currentStep === steps.length ? "Finish" : "Next"}
-				</Button>
+				{currentStep === steps.length ? (
+					<Button onClick={() => onSubmit(formData)} colorScheme="teal">
+						Finish
+					</Button>
+				) : (
+					<Button onClick={handleNext} colorScheme="teal">
+						Next
+					</Button>
+				)}
 			</Flex>
 		</Box>
 	);
