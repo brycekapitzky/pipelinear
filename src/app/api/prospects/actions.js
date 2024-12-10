@@ -116,5 +116,7 @@ export async function delete_prospect({
 }
 
 export async function get_all_prospect(){
-	return await prisma.prospects.findMany()
+	const records = await prisma.prospects.findMany({
+	})
+	return records
 }

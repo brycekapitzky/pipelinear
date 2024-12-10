@@ -6,8 +6,6 @@ import { FaPeopleGroup } from "react-icons/fa6";
 import { FaLinkedin, FaBuilding  } from "react-icons/fa";
 import { ResizableTable } from "@/components/ui/table";
 
-
-
 export default function SalesManagerDashboard() {
 
 	const prospects = [
