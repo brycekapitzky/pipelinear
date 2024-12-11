@@ -81,6 +81,7 @@ export async function edit_prospect({
 			prospect_company_description: prospect_company_description,
 			prospect_first_name: prospect_first_name,
 			prospect_last_name: prospect_last_name,
+			prospect_full_name: `${prospect_first_name} ${prospect_last_name}`,
 			prospect_job_title: prospect_job_title,
 			prospect_industry: prospect_industry,
 			prospect_headcount: prospect_headcount,

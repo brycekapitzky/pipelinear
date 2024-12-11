@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { Table, Button, Box, HStack, Flex, Text } from "@chakra-ui/react";
+import { FiEdit2, FiTrash } from "react-icons/fi";
 
-export const ResizableTable = ({ data = [], columns = [] }) => {
+export const ResizableTable = ({
+	data = [],
+	columns = [],
+	editAction = false,
+	deleteAction = false
+}) => {
 	const [currentPage, setCurrentPage] = useState(1); // Current page
 	const [rowsPerPage, setRowsPerPage] = useState(15); // Rows per page
 
@@ -18,9 +24,9 @@ export const ResizableTable = ({ data = [], columns = [] }) => {
 	};
 
 	return (
-		<Box>
+		<Box bgColor={'white'} p={3} borderRadius={2}>
 			{
-				data.length == 0 || columns.length == 0 ? 'Empty Records' :
+				data.length == 0 ? 'Empty Records' :
 					<>
 						<Table.ScrollArea borderWidth="1px" maxW="100%">
 							<Table.Root size="sm" variant="outline" showColumnBorder>
@@ -30,26 +36,44 @@ export const ResizableTable = ({ data = [], columns = [] }) => {
 											<Table.ColumnHeader
 												key={index}
 												textTransform={'capitalize'}
-												minW="100px">
+											>
 												{column.label}
 											</Table.ColumnHeader>
 										))}
+										{editAction ? <Table.ColumnHeader> Edit </Table.ColumnHeader> : null}
+										{deleteAction ? <Table.ColumnHeader> Delete </Table.ColumnHeader> : null}
+
 									</Table.Row>
 								</Table.Header>
-								<Table.Body>
-									{currentData.map((item, rowIndex) => (
-										<Table.Row key={rowIndex}>
-											{columns.map((column, index) => (
-												<Table.Cell key={index}>
+								{
+									data.length == 0 ? 'Empty Records' :
+										<Table.Body>
+											{currentData.map((item, rowIndex) => (
+												<Table.Row key={rowIndex}>
+													{columns.map((column, index) => (
+														<Table.Cell key={index}>
+															{
+																typeof item[column.value] == 'object' ? new Date(item[column.value]).toLocaleString() : item[column.value]
+															}
+														</Table.Cell>
+													))}
 													{
-														typeof item[column.value] == 'object' ? new Date(item[column.value]).toLocaleString(): item[column.value]
-														
+														editAction ?
+															<Table.Cell w={65}>
+																<Button onClick={() => editAction(item)} size={'sm'}> <FiEdit2 /> </Button>
+															</Table.Cell> : null
 													}
-												</Table.Cell>
+													{
+														deleteAction ?
+															<Table.Cell w={65}>
+																<Button onClick={() => deleteAction(item)} size={'sm'}> <FiTrash /> </Button>
+															</Table.Cell> : null
+													}
+
+												</Table.Row>
 											))}
-										</Table.Row>
-									))}
-								</Table.Body>
+										</Table.Body>
+								}
 							</Table.Root>
 						</Table.ScrollArea>
 
@@ -77,8 +101,6 @@ export const ResizableTable = ({ data = [], columns = [] }) => {
 						</Flex>
 					</>
 			}
-
-
 		</Box>
 	);
 };

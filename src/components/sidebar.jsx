@@ -32,30 +32,31 @@ import {
 import {
 	LuUserCog
 } from 'react-icons/lu'
+import { useRouter, usePathname } from 'next/navigation';
 
 const LinkItems =
 	{
 		'vendors': [
-			{ name: 'Home', icon: FaHome },
-			{ name: 'Database', icon: FaServer },
-			{ name: 'Profile', icon: FaUser },
-			{ name: 'Team', icon: FaUsers },
-			{ name: 'Billing', icon: FaMoneyBillWave },
-			{ name: 'Referrals', icon: FaHandshake },
+			{ name: 'Home', icon: FaHome, url: '/vendors' },
+			{ name: 'Database', icon: FaServer, url: '/vendors/databases' },
+			{ name: 'Profile', icon: FaUser, url: '/vendors/profile' },
+			{ name: 'Team', icon: FaUsers, url: '/vendors/team' },
+			{ name: 'Billing', icon: FaMoneyBillWave, url: '/vendors/billing' },
+			{ name: 'Referrals', icon: FaHandshake, url: '/vendors/referrals' },
 		],
 		'prospects': [
-			{ name: 'Home', icon: FaHome },
-			{ name: 'Vendors', icon: FaStore },
-			{ name: 'Proposals', icon: FaRegNewspaper },
-			{ name: 'Referrals', icon: FaHandshake },
+			{ name: 'Home', icon: FaHome, url: '/prospects' },
+			{ name: 'Vendors', icon: FaStore, url: '/prospects/vendors' },
+			{ name: 'Proposals', icon: FaRegNewspaper, url: '/prospects/proposals' },
+			{ name: 'Referrals', icon: FaHandshake, url: "/prospects/referrals" },
 		],
 		'sales_manager': [
-			{ name: 'Proposal Manager', icon: FaHome },
-			{ name: 'Vendors', icon: FaStore },
-			{ name: 'Prospects', icon: FaRegNewspaper },
-			{ name: 'Meetings', icon: MdOutlineAccessTime },
-			{ name: 'Onboarding', icon: FaHome },
-			{ name: 'Posts', icon: MdOutlineNewspaper },
+			{ name: 'Proposal Manager', icon: FaHome, url: '/sales' },
+			{ name: 'Vendors', icon: FaStore, url: '/sales/vendors' },
+			{ name: 'Prospects', icon: FaRegNewspaper, url: '/sales/prospects' },
+			{ name: 'Meetings', icon: MdOutlineAccessTime, url: '/sales/meetings' },
+			{ name: 'Onboarding', icon: FaHome, url: '/sales/onboarding' },
+			{ name: 'Posts', icon: MdOutlineNewspaper, url: '/sales/posts' },
 		]
 	}
 
@@ -118,7 +119,6 @@ const SidebarContent = ({ onClose, user_type, ...rest }) => {
 	return (
 		<Box
 			bg={'white'}
-
 			borderRight="1px"
 			borderRightColor={'gray.700'}
 			w={{ base: 'full', md: 60 }}
@@ -126,7 +126,7 @@ const SidebarContent = ({ onClose, user_type, ...rest }) => {
 			h="full"
 			{...rest}>
 			{LinkItems[user_type].map((link) => (
-				<NavItem key={link.name}>
+				<NavItem key={link.name} link={link.url}>
 					<Box mr={4}> {link.icon()} </Box>
 					<Text> {link.name} </Text>
 				</NavItem>
@@ -135,11 +135,16 @@ const SidebarContent = ({ onClose, user_type, ...rest }) => {
 	)
 }
 
-const NavItem = ({ children }) => {
+const NavItem = ({ link, children }) => {
+	const router = useRouter()
+
+	const gotoLink = ( link ) => {
+		router.push( link )
+	}
+
 	return (
 		<Box
-			as="a"
-			href="#"
+			onClick={() => gotoLink( link )}
 			style={{ textDecoration: 'none' }}
 			_focus={{ boxShadow: 'none' }}>
 			<Flex
