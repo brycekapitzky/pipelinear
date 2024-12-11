@@ -32,7 +32,7 @@ model Prospects {
 	prospect_job_title					String
 	prospect_industry					String?
 	prospect_headcount					Int
-	prospect_important_notes			String
+	prospect_important_notes			String?
 	prospect_pitched_campaigns			String
 	prospect_company_name				String
 	prospect_phone_number				String
