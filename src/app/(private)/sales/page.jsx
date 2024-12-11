@@ -1,6 +1,8 @@
 
 import SalesManagerLayout from "@/app/layouts/SalesManagerLayout.jsx/layout";
-import SalesManagerDashboard from "@/components/pages/dashboard/sales-dashboard";
+import dynamic from "next/dynamic";
+
+const SalesManagerDashboard = dynamic(() => import("@/components/pages/dashboard/sales-dashboard"));
 
 export default function SalesManagerPage() {
 	return <SalesManagerLayout>

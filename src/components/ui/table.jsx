@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { Table, Button, Box, HStack, Flex, Text } from "@chakra-ui/react";
 
-export const ResizableTable = ({ data, columns2 }) => {
+export const ResizableTable = ({ data = [], columns = [] }) => {
 	const [currentPage, setCurrentPage] = useState(1); // Current page
 	const [rowsPerPage, setRowsPerPage] = useState(15); // Rows per page
-
-	const columns = data.length != 0 ? Object.keys(data[0]) : [];
 
 	// Calculate pagination details
 	const totalPages = Math.ceil(data.length / rowsPerPage);
@@ -22,13 +20,13 @@ export const ResizableTable = ({ data, columns2 }) => {
 	return (
 		<Box>
 			{
-				data.length == 0 ? 'Empty Records' :
+				data.length == 0 || columns.length == 0 ? 'Empty Records' :
 					<>
 						<Table.ScrollArea borderWidth="1px" maxW="100%">
 							<Table.Root size="sm" variant="outline" showColumnBorder>
 								<Table.Header>
 									<Table.Row>
-										{columns2.map((column, index) => (
+										{columns.map((column, index) => (
 											<Table.ColumnHeader
 												key={index}
 												textTransform={'capitalize'}
@@ -41,7 +39,7 @@ export const ResizableTable = ({ data, columns2 }) => {
 								<Table.Body>
 									{currentData.map((item, rowIndex) => (
 										<Table.Row key={rowIndex}>
-											{columns2.map((column, index) => (
+											{columns.map((column, index) => (
 												<Table.Cell key={index}>
 													{
 														typeof item[column.value] == 'object' ? new Date(item[column.value]).toLocaleString(): item[column.value]

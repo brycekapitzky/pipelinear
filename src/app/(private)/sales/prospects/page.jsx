@@ -1,5 +1,7 @@
 import SalesManagerLayout from "@/app/layouts/SalesManagerLayout.jsx/layout";
-import SalesProspects from "@/components/pages/sales/SalesProspects";
+import dynamic from "next/dynamic";
+
+const SalesProspects = dynamic(() => import ('@/components/pages/sales/SalesProspects') )
 
 export default function SalesManagerProspectPage() {
     return <SalesManagerLayout>

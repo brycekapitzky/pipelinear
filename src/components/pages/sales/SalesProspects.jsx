@@ -22,7 +22,7 @@ export default function SalesProspects() {
 					{ label: "Job title", value: 'prospect_job_title' },
 				]
 			}
-			data={prospects}
+			data={prospects || []}
 		/>
 	</Flex>
 }
