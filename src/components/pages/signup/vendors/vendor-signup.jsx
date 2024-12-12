@@ -5,9 +5,10 @@ import { Text, Box, Input, Flex, Textarea } from '@chakra-ui/react'
 import { CheckboxList } from '@/components/ui/checkbox-list'
 import { RadioGroup } from '@/components/ui/radio-group'
 import { Field } from "@/components/ui/field"
+import { useState } from 'react'
 
-function InitialAgreementForm() {
-	return <Box>
+function InitialAgreementForm({ get_values, hidden }) {
+	return <Box display={ !hidden ? 'none': 'initial'}>
 		<Text textAlign={'justify'}> {`1. Pipelinear operates a sales team that primarily prospects cold outreach sales channels.`} </Text>
 		<Text textAlign={'justify'}> {`2. We ask prospects to have deep-dive 30-min interview with us in exchange for an incentive to learn ongoing initiatives.`} </Text>
 		<Text textAlign={'justify'}> {`3. We book sales meetings with target market prospects that are buying what our client's offer`} </Text>
@@ -20,11 +21,10 @@ function InitialAgreementForm() {
 			]}
 		/>
 	</Box>
-
 }
 
-function CompanyDetailsForm() {
-	return <>
+function CompanyDetailsForm({ get_values, hidden }) {
+	return <Flex display={ !hidden ? 'none': 'flex'}>
 		<Box>
 			<Text textAlign={"justify"}> What would you like to sign up for? </Text>
 			<RadioGroup
@@ -87,10 +87,10 @@ function CompanyDetailsForm() {
 					placeholder='Enter your company website' />
 			</Field>
 		</Flex>
-	</>
+	</Flex>
 }
 
-function MarketingDetialsForm() {
+function MarketingDetialsForm({ get_values, hidden }) {
 	return <>
 		<Field
 			mt={5}
@@ -164,7 +164,7 @@ function MarketingDetialsForm() {
 	</>
 }
 
-function TermsAndPrivacy() {
+function TermsAndPrivacy({ get_values, hidden }) {
 	return <>
 		<Text>
 			Read the <span> Terms of Service </span> & <span> Privacy Policy </span>
@@ -181,7 +181,7 @@ function TermsAndPrivacy() {
 	</>
 }
 
-function ExpectationAlignment() {
+function ExpectationAlignment({ get_values }) {
 	return <>
 		<Text textAlign={'justify'}>
 			PipeLinear offers incentives like Amazon eGift cards to prospects to have a 30 minute interview about services company goals and purchasing processes.
@@ -200,13 +200,63 @@ function ExpectationAlignment() {
 }
 
 export default function VendorSignup() {
+	const [ companyDetailsForm, setCompanyDetailsForm] = useState()
+	const [ marketingDetailsForm, setMarketingDetailsForm ] = useState()
+	const [ initialAgreement, setInitialAgreement ] = useState()
+	const [ termsPrivacy, setTermsPrivacy ] = useState()
+	const [ currentStep , setCurrentStep ] = useState( 1 )
+
 	const steps = [
-		{ id: 1, label: "Initial Agreement", component: <InitialAgreementForm /> },
-		{ id: 2, label: "Company Profile", component: <CompanyDetailsForm /> },
-		{ id: 3, label: "Market Profile", component: <MarketingDetialsForm /> },
-		{ id: 4, label: "Terms of Service & Privacy Policy", component: <TermsAndPrivacy /> },
-		{ id: 5, label: "Expectation Alignment", component: <ExpectationAlignment /> }
+		{
+			id: 1,
+			label: "Initial Agreement",
+			component: <InitialAgreementForm
+				key={1}
+				hidden={currentStep == 1}
+				get_values={e => setInitialAgreement(e)}
+				/> 
+		},
+		{
+			id: 2,
+			label: "Company Profile",
+			component: <CompanyDetailsForm
+				key={2}
+				hidden={currentStep == 2}
+				get_values={e => setCompanyDetailsForm(e) }
+				/> 
+		},
+		{
+			id: 3,
+			label: "Market Profile",
+			component: <MarketingDetialsForm
+				key={3}
+				hidden={currentStep == 3}
+				get_values={e => setMarketingDetailsForm(e) }
+				/> 
+		},
+		{
+			id: 4,
+			label: "Terms of Service & Privacy Policy",
+			component: <TermsAndPrivacy
+				key={4}
+				hidden={currentStep == 4}
+				get_values={e => setTermsPrivacy(e)}
+				/> 
+		},
+		{
+			id: 5,
+			label: "Expectation Alignment",
+			component: <ExpectationAlignment key={5} hidden={currentStep == 5} />
+		}
 
 	]
-	return <Stepper steps={steps} />
+
+	const submitForm = () => {
+
+	}
+	return <Stepper
+		steps={steps}
+		getCurrentStep={e => setCurrentStep(e)}
+		onSubmit={() => submitForm()}
+		/>
 }

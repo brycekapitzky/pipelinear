@@ -137,6 +137,7 @@ const SidebarContent = ({ onClose, user_type, ...rest }) => {
 
 const NavItem = ({ link, children }) => {
 	const router = useRouter()
+	const pathname = usePathname()
 
 	const gotoLink = ( link ) => {
 		router.push( link )
@@ -154,11 +155,13 @@ const NavItem = ({ link, children }) => {
 				mt={3}
 				borderRadius="lg"
 				borderColor={"gray.200"}
+				bgColor={ pathname == link ? 'black' : 'white'}
+				color={ pathname == link ? 'white' : 'black' }
 				borderWidth={2}
 				role="group"
 				cursor="pointer"
 				_hover={{
-					bg: 'gray.200',
+					bg: pathname == link ? 'gray.800' : 'gray.200',
 				}}
 			>
 				{children}
