@@ -67,7 +67,10 @@ export default function SalesProspects() {
 	}
 
 	return <Flex mt={10} flexDirection={'column'} w={'100%'}>
+		<Text fontSize={'3xl'}> Prospects </Text>
+
 		<ResizableTable
+			mt={3}
 			columns={
 				[
 					{ label: "First Name", value: 'prospect_first_name' },

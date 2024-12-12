@@ -6,7 +6,8 @@ export const ResizableTable = ({
 	data = [],
 	columns = [],
 	editAction = false,
-	deleteAction = false
+	deleteAction = false,
+	...rest
 }) => {
 	const [currentPage, setCurrentPage] = useState(1); // Current page
 	const [rowsPerPage, setRowsPerPage] = useState(15); // Rows per page
@@ -24,7 +25,7 @@ export const ResizableTable = ({
 	};
 
 	return (
-		<Box bgColor={'white'} p={3} borderRadius={2}>
+		<Box bgColor={'white'} p={3} borderRadius={2} {...rest}>
 			{
 				data.length == 0 ? 'Empty Records' :
 					<>

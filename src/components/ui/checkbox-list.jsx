@@ -9,6 +9,7 @@ export const CheckboxList = ({ items, header, getSelectedChoices, ...rest }) => 
 		if ( getSelectedChoices ) {
 			getSelectedChoices( checkedItems )
 		}
+		console.info( 'selected choices ?? ', checkedItems )
 	}, [checkedItems])
 
 	const handleCheckboxChange = (e, value) => {

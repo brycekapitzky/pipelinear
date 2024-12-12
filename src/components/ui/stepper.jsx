@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Text, Spinner } from "@chakra-ui/react";
 
-const Stepper = ({ steps, onSubmit, getCurrentStep }) => {
+const Stepper = ({ steps, onSubmit, getCurrentStep, loading = false, loadingText = "Saving..." }) => {
 	const [currentStep, setCurrentStep] = useState(1);
 	const [formData, setFormData] = useState({}); // Collect data from all steps
 
@@ -56,8 +56,14 @@ const Stepper = ({ steps, onSubmit, getCurrentStep }) => {
 					Back
 				</Button>
 				{currentStep === steps.length ? (
-					<Button onClick={() => onSubmit(formData)} colorScheme="teal">
-						Finish
+					<Button
+						onClick={() => !loading ? onSubmit(formData) : null }
+						bgColor={ loading ? 'gray.600' : 'black'}
+						colorScheme="teal"
+					>
+						{
+							loading ? <> <Spinner /> {loadingText} </> : 'Finish'
+						}
 					</Button>
 				) : (
 					<Button onClick={handleNext} colorScheme="teal">

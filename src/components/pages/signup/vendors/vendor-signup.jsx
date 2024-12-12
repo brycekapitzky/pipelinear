@@ -1,11 +1,19 @@
 'use client'
 
 import Stepper from '@/components/ui/stepper'
-import { Text, Box, Input, Flex, Textarea } from '@chakra-ui/react'
+import { Text, Box, Input, Flex, Textarea, useStatStyles } from '@chakra-ui/react'
 import { CheckboxList } from '@/components/ui/checkbox-list'
 import { RadioGroup } from '@/components/ui/radio-group'
 import { Field } from "@/components/ui/field"
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import {
+	add_vendor as add_vendor_action,
+	edit_vendor as edit_vendor_action,
+	delete_vendor as delete_vendor_action,
+	get_all_vendor as get_all_vendor_action
+} from '@/app/api/vendors/actions'
+import { useRouter } from 'next/navigation';
+
 
 function InitialAgreementForm({ get_values, hidden }) {
 	return <Box display={ !hidden ? 'none': 'initial'}>
@@ -24,7 +32,23 @@ function InitialAgreementForm({ get_values, hidden }) {
 }
 
 function CompanyDetailsForm({ get_values, hidden }) {
-	return <Flex display={ !hidden ? 'none': 'flex'}>
+	const [companyForm, setCompanyForm] = useState({
+		client_full_name: '',
+		client_company_name: '',
+		client_company_website: '',
+		client_email: '',
+		client_phone_number: '',
+		client_linkedin_profile: ''
+	})
+
+	useEffect(() => {
+		if ( get_values ) {
+			get_values({
+				...companyForm
+			})
+		}
+	}, [companyForm])
+	return <Flex display={ !hidden ? 'none': 'flex'} flexDirection={'column'}>
 		<Box>
 			<Text textAlign={"justify"}> What would you like to sign up for? </Text>
 			<RadioGroup
@@ -42,6 +66,8 @@ function CompanyDetailsForm({ get_values, hidden }) {
 				p={2}
 				border="1px solid #c4c4c4"
 				type='text'
+				value={companyForm?.client_full_name}
+				onChange={e => setCompanyForm({ ...companyForm, client_full_name: e.target.value })}
 				placeholder='Enter your full name' />
 		</Field>
 
@@ -49,6 +75,8 @@ function CompanyDetailsForm({ get_values, hidden }) {
 			<Field label="What is your company name?">
 				<Input
 					p={2}
+					value={companyForm?.client_company_name}
+					onChange={e => setCompanyForm({ ...companyForm, client_company_name: e.target.value })}
 					border="1px solid #c4c4c4"
 					type='text'
 					placeholder='Enter your company name' />
@@ -59,6 +87,8 @@ function CompanyDetailsForm({ get_values, hidden }) {
 					p={2}
 					border="1px solid #c4c4c4"
 					type='text'
+					value={companyForm?.client_email}
+					onChange={e => setCompanyForm({ ...companyForm, client_email: e.target.value })}
 					placeholder='Enter email address' />
 			</Field>
 		</Flex>
@@ -68,6 +98,8 @@ function CompanyDetailsForm({ get_values, hidden }) {
 				p={2}
 				border="1px solid #c4c4c4"
 				type='tel'
+				value={companyForm?.client_phone_number}
+				onChange={e => setCompanyForm({ ...companyForm, client_phone_number: e.target.value })}
 				placeholder='(201) 555-0123' />
 		</Field>
 
@@ -77,6 +109,8 @@ function CompanyDetailsForm({ get_values, hidden }) {
 					p={2}
 					border="1px solid #c4c4c4"
 					type='text'
+					value={companyForm?.client_linkedin_profile}
+					onChange={e => setCompanyForm({ ...companyForm, client_linkedin_profile: e.target.value })}
 					placeholder='Enter your linkedin profile' />
 			</Field>
 			<Field label="What is your company website?">
@@ -84,6 +118,8 @@ function CompanyDetailsForm({ get_values, hidden }) {
 					p={2}
 					border="1px solid #c4c4c4"
 					type='text'
+					value={companyForm?.client_company_website}
+					onChange={e => setCompanyForm({ ...companyForm, client_company_website: e.target.value })}
 					placeholder='Enter your company website' />
 			</Field>
 		</Flex>
@@ -91,7 +127,22 @@ function CompanyDetailsForm({ get_values, hidden }) {
 }
 
 function MarketingDetialsForm({ get_values, hidden }) {
-	return <>
+	const [marketingDetailsForm, setMarketingDetailsForm] = useState({
+		client_value_proposition: '',
+		client_industry: '',
+		client_calendly: '',
+		client_preferences: '',
+		client_preferred_job_titles: ''
+	})
+
+	useEffect(() => {
+		if ( get_values ) {
+			get_values({
+				...marketingDetailsForm
+			})
+		}
+	}, [ marketingDetailsForm ])
+	return <Flex display={ !hidden ? 'none' : 'flex'} flexDirection={'column'}>
 		<Field
 			mt={5}
 			label="What is your most compelling value proposition?"
@@ -99,6 +150,8 @@ function MarketingDetialsForm({ get_values, hidden }) {
 			<Textarea
 				variant="outline"
 				p={2}
+				value={marketingDetailsForm?.client_value_proposition}
+				onChange={e => setMarketingDetailsForm({ ...marketingDetailsForm, client_value_proposition: e.target.value })}
 				placeholder='Enter compelling value propositions'
 				border="1px solid #c4c4c4"
 			></Textarea>
@@ -111,6 +164,8 @@ function MarketingDetialsForm({ get_values, hidden }) {
 			<Textarea
 				variant="outline"
 				p={2}
+				value={marketingDetailsForm?.client_industry}
+				onChange={e => setMarketingDetailsForm({ ...marketingDetailsForm, client_industry: e.target.value })}
 				placeholder='Enter target industries'
 				border="1px solid #c4c4c4"
 			></Textarea>
@@ -119,13 +174,14 @@ function MarketingDetialsForm({ get_values, hidden }) {
 		<CheckboxList
 			mt={5}
 			header={"What is your ideal target's company headcount ?"}
+			getSelectedChoices={(e) => setMarketingDetailsForm({ ...marketingDetailsForm, client_headcount: e.join( ',' ) }) }
 			items={
 				[
-					{ label: "1-10 headcount", value: "1" },
-					{ label: "11-20 headcount", value: "2" },
-					{ label: "21-50 headcount", value: "3" },
-					{ label: "51-100 headcount", value: "4" },
-					{ label: "101+ headcount", value: "5" }
+					{ label: "1-10 headcount", value: "1-10 headcount" },
+					{ label: "11-20 headcount", value: "11-20 headcount" },
+					{ label: "21-50 headcount", value: "21-50 headcount" },
+					{ label: "51-100 headcount", value: "51-100 headcount" },
+					{ label: "101+ headcount", value: "101+ headcount" }
 				]
 			}
 		/>
@@ -137,6 +193,8 @@ function MarketingDetialsForm({ get_values, hidden }) {
 			<Textarea
 				variant="outline"
 				p={2}
+				value={marketingDetailsForm?.client_preferred_job_titles}
+				onChange={e => setMarketingDetailsForm({ ...marketingDetailsForm, client_preferred_job_titles: e.target.value })}
 				placeholder='CEO, Founder, President, CMO, CTO, Director IT, etc.`'
 				border="1px solid #c4c4c4"
 			></Textarea>
@@ -147,6 +205,8 @@ function MarketingDetialsForm({ get_values, hidden }) {
 				p={2}
 				border="1px solid #c4c4c4"
 				type='text'
+				value={marketingDetailsForm?.client_calendly}
+				onChange={ e => setMarketingDetailsForm({ ...marketingDetailsForm, client_calendly: e.target.value })}
 				placeholder='A scheduling or Calendly link is required to work with us.' />
 		</Field>
 
@@ -157,15 +217,26 @@ function MarketingDetialsForm({ get_values, hidden }) {
 			<Textarea
 				variant="outline"
 				p={2}
+				value={marketingDetailsForm?.client_preferences}
+				onChange={e => setMarketingDetailsForm({ ...marketingDetailsForm, client_preferences: e.target.value })}
 				placeholder='We aim to accommodate your preferences but cannot guarantee adherence to all parameters due to service line specifics and resource constraints.'
 				border="1px solid #c4c4c4"
 			></Textarea>
 		</Field>
-	</>
+	</Flex>
 }
 
 function TermsAndPrivacy({ get_values, hidden }) {
-	return <>
+
+	const [ termsAndPrivacy, setTermsAndPrivacy ] = useState( false )
+
+	useEffect( () => {
+		if ( get_values ) {
+			get_values( termsAndPrivacy )
+		}
+	}, [ termsAndPrivacy ])
+
+	return <Flex display={ !hidden ? 'none' : 'flex' } flexDirection={'column'}>
 		<Text>
 			Read the <span> Terms of Service </span> & <span> Privacy Policy </span>
 		</Text>
@@ -173,16 +244,25 @@ function TermsAndPrivacy({ get_values, hidden }) {
 		<RadioGroup
 			mt={3}
 			orientation="horizontal"
+			getSelectedChoice={e => setTermsAndPrivacy( e )}
 			options={[
 				{ label: "I accept", value: true },
 				{ label: "I don't accept", value: false }
 			]}
 		/>
-	</>
+	</Flex>
 }
 
-function ExpectationAlignment({ get_values }) {
-	return <>
+function ExpectationAlignment({ get_values, hidden }) {
+	const [ exceptionAlignment, setExceptionalAlignment ] = useState()
+
+	useEffect(() => {
+		if ( get_values ) {
+			get_values( exceptionAlignment )
+		}
+	}, [ exceptionAlignment ])
+
+	return <Flex display={ !hidden ? 'none' : 'flex' } flexDirection={'column'}>
 		<Text textAlign={'justify'}>
 			PipeLinear offers incentives like Amazon eGift cards to prospects to have a 30 minute interview about services company goals and purchasing processes.
 
@@ -191,12 +271,13 @@ function ExpectationAlignment({ get_values }) {
 		<RadioGroup
 			mt={3}
 			orientation="horizontal"
+			getSelectedChoice={e => setExceptionalAlignment(e)}
 			options={[
 				{ label: "I accept", value: true },
 				{ label: "I don't accept", value: false }
 			]}
 		/>
-	</>
+	</Flex>
 }
 
 export default function VendorSignup() {
@@ -205,6 +286,8 @@ export default function VendorSignup() {
 	const [ initialAgreement, setInitialAgreement ] = useState()
 	const [ termsPrivacy, setTermsPrivacy ] = useState()
 	const [ currentStep , setCurrentStep ] = useState( 1 )
+	const [ loading, setLoading ] = useState( false )
+	const router = useRouter()
 
 	const steps = [
 		{
@@ -251,12 +334,25 @@ export default function VendorSignup() {
 
 	]
 
-	const submitForm = () => {
+	const submitForm = async () => {
+		setLoading ( true )
+		console.info( companyDetailsForm )
+		console.info( marketingDetailsForm )
+		const record = await add_vendor_action({
+			...companyDetailsForm,
+			...marketingDetailsForm
+		})
+		router.push( '/sales/vendors' )
+		setLoading ( false )
 
+		console.info(' [added success] record is ', record)
 	}
+
 	return <Stepper
 		steps={steps}
 		getCurrentStep={e => setCurrentStep(e)}
+		loading={ loading }
+		loadingText='Saving record...'
 		onSubmit={() => submitForm()}
 		/>
 }

@@ -6,6 +6,8 @@ import { Field } from "@/components/ui/field"
 import { Input, Flex, Box, Text, Textarea, Button } from '@chakra-ui/react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { CheckboxList } from '@/components/ui/checkbox-list'
+import { useRouter } from 'next/navigation';
+
 import {
 	add_prospect
 } from '@/app/api/prospects/actions'
@@ -264,6 +266,7 @@ export default function ProspectSignup() {
 		}
 	)
 	const [currentStep, setCurrentStep] = useState(1)
+	const [ loading, setLoading ] = useState( false )
 
 	const steps = [
 		{ 
@@ -282,8 +285,11 @@ export default function ProspectSignup() {
 			component: <HyperVendorForm key={3} hidden={currentStep == 3} get_values={e => setHyperVendorForm(e)} /> 
 		},
 	]
+	const router = useRouter()
 
 	const submitForm = async () => {
+		setLoading( true )
+
 		const { firstName, lastName, linkedin, emailAddress } = personalDetailsForm
 		const { company_headcount, company_name, company_position, company_website } = companyForm
 		const { phone_number, other_services, frequency, notes } = hyperVendorForm
@@ -304,6 +310,9 @@ export default function ProspectSignup() {
 			prospect_other_services: other_services.join(','),
 			prospect_date_submitted: new Date(),
 		})
+
+		router.push( '/sales/prospects')
+		setLoading( false )
 		console.info(' [added success] record is ', record)
 	}
 	return <>
@@ -311,6 +320,8 @@ export default function ProspectSignup() {
 			steps={steps}
 			getCurrentStep={e => setCurrentStep(e)}
 			onSubmit={() => submitForm()}
+			loading={ loading }
+			loadingText='Saving record...'
 			/>
 	</>
 }

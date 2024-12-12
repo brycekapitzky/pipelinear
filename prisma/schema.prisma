@@ -56,36 +56,37 @@ model SalesManager {
 	manager_id				String @id @default(uuid())
 	manager_name			String
 
-	clients					Clients[]
 	proposals				Proposal[]
 }
 
 model Clients {
 	client_id					String @id @default(uuid())
-	client_name					String
+	client_full_name			String
+	client_company_name			String
+	client_company_website		String
 	client_email				String
 	client_phone_number			String
-	client_website				String
 	client_calendly				String
-	client_job_title			String
-	client_headcount			Int
+	client_job_title			String?
+	client_headcount			String?
 	client_industry				String
-	client_main_pitch			String
-	client_onboarding_date		DateTime
-	client_cap					Int
-	client_onboarding			Boolean
-	client_intro_email			Boolean
-	client_last_updated			DateTime
-	client_week_number			Int
-	client_assigned_date		DateTime
-	client_assigned_week		Int
-	client_transcript			String
+	client_main_pitch			String?
+	client_onboarding_date		DateTime?
+	client_cap					Int?
+	client_onboarding			Boolean?
+	client_intro_email			Boolean?
+	client_last_updated			DateTime?
+	client_week_number			Int?
+	client_assigned_date		DateTime?
+	client_assigned_week		Int?
+	client_transcript			String?
 	client_linkedin_profile		String
 	client_value_proposition	String
-	client_service_offered		String
-	client_important_notes		String
-	manager_id					String
+	client_service_offered		String?
+	client_important_notes		String?
+	client_preferences			String?
+	client_preferred_job_titles	String?
+	manager_id					String?
 
-	sales_manager				SalesManager @relation( fields: [manager_id], references: [manager_id])
 	proposals					Proposal[]
 }
