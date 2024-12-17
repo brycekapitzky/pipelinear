@@ -8,6 +8,7 @@ import { Input, Flex, Box, Text, Textarea, Button } from '@chakra-ui/react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { CheckboxList } from '@/components/ui/checkbox-list'
 import { useRouter } from 'next/navigation';
+import { login as login_action } from '@/app/api/auth/actions'
 
 import {
 	add_prospect
@@ -345,8 +346,9 @@ export default function ProspectSignup() {
 			prospect_date_submitted: new Date(),
 			prospect_password_hash: hashed_password,
 		})
+		await login_action( emailAddress, password, 'prospects' )
 
-		router.push( '/sales/prospects')
+		router.push( '/prospects')
 		setLoading( false )
 		console.info(' [added success] record is ', record)
 	}
