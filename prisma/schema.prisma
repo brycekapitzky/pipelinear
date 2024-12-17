@@ -53,6 +53,8 @@ model Prospects {
 	prospect_created					DateTime @default(now())
 	prospect_last_updated				DateTime
 	prospect_onboarding_week			Int?
+
+	meetings							Meetings[]
 }
 
 model SalesManager {
@@ -95,4 +97,28 @@ model Clients {
 	manager_id					String?
 
 	proposals					Proposal[]
+	meetings					Meetings[]
+}
+
+model Meetings {
+	meetings_id					String @id @default(uuid())
+	meetings_feedback			String?
+	meetings_egc				String?
+	meetings_billed				String?
+	meetings_value				Int
+	meeting_time				DateTime
+	meeting_for					String
+	meetings_client_id			String
+	meetings_prospect_id		String
+	meetings_notes				String
+	meetings_booked_week		Int
+	meetings_billed_date		DateTime?
+	meetings_billed_week		Int?
+	meetings_p4499_incentive	String
+	meetings_campaign			Int
+	meetings_team				String
+	meetings_modified_date		DateTime?
+
+	prospects					Prospects @relation( fields: [meetings_prospect_id], references: [prospect_id] )
+	clients						Clients @relation( fields: [meetings_client_id], references: [client_id])
 }
