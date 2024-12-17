@@ -106,15 +106,15 @@ model Meetings {
 	meetings_egc				String?
 	meetings_billed				String?
 	meetings_value				Int
-	meeting_time				DateTime
-	meeting_for					String
+	meetings_time				DateTime
+	meetings_for					String
 	meetings_client_id			String
 	meetings_prospect_id		String
 	meetings_notes				String
 	meetings_booked_week		Int
 	meetings_billed_date		DateTime?
 	meetings_billed_week		Int?
-	meetings_p4499_incentive	String
+	meetings_p499_incentive	String
 	meetings_campaign			Int
 	meetings_team				String
 	meetings_modified_date		DateTime?

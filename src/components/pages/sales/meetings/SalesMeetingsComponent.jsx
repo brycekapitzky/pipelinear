@@ -17,7 +17,7 @@ export default function SalesMeetingsComponent() {
 			justifyContent={'space-between'}
 		>
 			<Text fontSize={20}> Meetings </Text>
-			<Button onClick={() => router.push( '/meetings/add' )}> <FaPlusCircle /> Add </Button>
+			<Button onClick={() => router.push( '/sales/meetings/new' )}> <FaPlusCircle /> Add </Button>
 		</Flex>
 
 

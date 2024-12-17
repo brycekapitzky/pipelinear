@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic"
-// const SalesMeetingsComponent = dynamic( () => ("@/components/pages/sales/meetings/SalesMeetingsComponent"))
+import SalesManagerLayout from "@/app/layouts/SalesManagerLayout.jsx/layout";
 
 import SalesMeetingsComponent from '@/components/pages/sales/meetings/SalesMeetingForm'
 export const metadata = {
@@ -7,5 +7,7 @@ export const metadata = {
 }
 
 export default function NewMeetingsPage() {
-	return <SalesMeetingsComponent />
+	return <SalesManagerLayout>
+		<SalesMeetingsComponent />
+	</SalesManagerLayout>
 }

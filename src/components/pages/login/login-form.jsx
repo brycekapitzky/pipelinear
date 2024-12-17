@@ -19,7 +19,7 @@ export default function LoginForm({ user_type }) {
 	const [errorMsg, setErrorMsg] = useState('')
 
 	const gotoCreateAccount = () => {
-		router.push( `${user_type}` )
+		router.push( `/signup/${user_type}` )
 	}
 
 	const loginAction = async (ev) => {
