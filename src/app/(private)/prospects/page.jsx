@@ -10,21 +10,26 @@ export const metadata = {
 }
 
 export default async function ProspectsPage() {
-	const cookieStore = await cookies()
-	const session = cookieStore.get('session')
-
-	if (session && session.value) {
-		const { user_type } = await verifyToken(session.value)
-
-		if (user_type == 'prospects') {
-			return (
-				<ProspectsProposalsLayout>
-					<ProspectsDashboard />
-				</ProspectsProposalsLayout>)
+	try {
+		const cookieStore = await cookies()
+		const session = cookieStore.get('session')
+	
+		if (session && session.value) {
+			const { user_type } = await verifyToken(session.value)
+	
+			if (user_type == 'prospects') {
+				return (
+					<ProspectsProposalsLayout>
+						<ProspectsDashboard />
+					</ProspectsProposalsLayout>)
+			} else {
+				redirect( `/${user_type}`)
+			}
 		} else {
-			redirect( `/${user_type}`)
+			return redirect('/login')
 		}
-	} else {
+	} catch ( err ) {
 		return redirect('/login')
 	}
+	
 }

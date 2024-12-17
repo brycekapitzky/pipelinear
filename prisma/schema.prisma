@@ -20,7 +20,9 @@ model Proposal {
 
 model SalesPost {
 	sales_post_id						String @id @default(uuid())
-
+	sales_post_comapny_name				String
+	sales_post_company_url				String
+	sales_company_main_pitch			String
 }
 
 model Prospects {

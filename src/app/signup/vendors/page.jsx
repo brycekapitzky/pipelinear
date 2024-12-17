@@ -8,14 +8,19 @@ export const metadata = {
 };
 
 export default async function VendorSignUp() {
-	const cookieStore = await cookies()
-	const session = cookieStore.get('session')
-
-	if (session && session.value) {
-		const { user_type } = await verifyToken(session.value)
-
-		redirect(`/${user_type}`)
-	} else {
+	try {
+		const cookieStore = await cookies()
+		const session = cookieStore.get('session')
+	
+		if (session && session.value) {
+			const { user_type } = await verifyToken(session.value)
+	
+			redirect(`/${user_type}`)
+		} else {
+			return (<SignupForm user_type={"vendor"} />)
+		}
+	} catch ( err ) {
 		return (<SignupForm user_type={"vendor"} />)
 	}
+	
 }

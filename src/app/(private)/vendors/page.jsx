@@ -9,23 +9,24 @@ export const metadata = {
 }
 
 export default async function VendorsPage() {
-	const cookieStore = await cookies()
-	const session = cookieStore.get('session')
-	
-	if (session && session.value) {
-		const { user_type } = await verifyToken(session.value)
-		
-		if ( user_type == 'vendors' ) {
-			return <VendorsLayout>
-			<VendorDashboard />
-		</VendorsLayout>
-		} else {
-			return redirect( `${user_type}`)
-		}
+	try {
+		const cookieStore = await cookies()
+		const session = cookieStore.get('session')
 
-	} else {
+		if (session && session.value) {
+			const { user_type } = await verifyToken(session.value)
+
+			if (user_type == 'vendors') {
+				return <VendorsLayout>
+					<VendorDashboard />
+				</VendorsLayout>
+			} else {
+				return redirect(`${user_type}`)
+			}
+		} else {
+			return redirect('/login')
+		}
+	} catch (err) {
 		return redirect('/login')
 	}
-
-
 }

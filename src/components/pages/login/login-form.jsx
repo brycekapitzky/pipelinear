@@ -18,8 +18,8 @@ export default function LoginForm({ user_type }) {
 	const [loading, setLoading] = useState(false)
 	const [errorMsg, setErrorMsg] = useState('')
 
-	const gotoDashboard = () => {
-		router.push(`/${user_type}`)
+	const gotoCreateAccount = () => {
+		router.push( `${user_type}` )
 	}
 
 	const loginAction = async (ev) => {
@@ -43,7 +43,6 @@ export default function LoginForm({ user_type }) {
 				console.info('error occured ', err)
 			}
 		}
-
 	}
 
 	return (
@@ -124,7 +123,7 @@ export default function LoginForm({ user_type }) {
 											</Button>
 										</Flex>
 										<Flex flex={1}>
-											<Button backgroundColor="black" w="100%" color="white" variant="subtle" fontSize="12px"> <RiUserAddLine /> Sign Up </Button>
+											<Button onClick={gotoCreateAccount} backgroundColor="black" w="100%" color="white" variant="subtle" fontSize="12px"> <RiUserAddLine /> Sign Up </Button>
 										</Flex>
 									</Flex>
 								</Stack>

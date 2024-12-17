@@ -8,16 +8,19 @@ export const metadata = {
 };
 
 export default async function MainLoginPage() {
-	const cookieStore = await cookies()
-	const session = cookieStore.get( 'session' )
-
-	if ( session && session.value ) {
-		const { user_type } = await verifyToken(session.value)
-
-		console.info( 'user tyoe  ?? ', user_type )
-		redirect( `/${user_type}`)
-	} else {
+	try {
+		const cookieStore = await cookies()
+		const session = cookieStore.get( 'session' )
+	
+		if ( session && session.value ) {
+			const { user_type } = await verifyToken(session.value)
+			redirect( `/${user_type}`)
+		} else {
+			return ( <MainLogin /> )
+		}
+	} catch ( err ) {
 		return ( <MainLogin /> )
 	}
+	
 
 }
