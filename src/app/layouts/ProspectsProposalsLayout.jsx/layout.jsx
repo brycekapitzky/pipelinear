@@ -1,6 +1,14 @@
 import SimpleSidebar from "@/components/sidebar";
+import { cookies } from "next/headers"
+import { verifyToken } from "@/app/api/lib/auth"
 
-export default function ProspectsProposalsLayout({ children }) {
+export default async function ProspectsProposalsLayout({ children }) {
 
-	return ( <SimpleSidebar user_type={'prospects'}> {children} </SimpleSidebar> )
+	const cookieStore = await cookies()
+	const session = cookieStore.get('session')
+	const { email } = await verifyToken(session.value)
+
+	const username = email.split('@')[0]
+
+	return ( <SimpleSidebar username={username} user_type={'prospects'}> {children} </SimpleSidebar> )
 }

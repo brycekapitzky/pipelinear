@@ -9,7 +9,7 @@ const SECRET_KEY = process.env.JWT_TOKEN
 
 export async function login( email, password, user_type ) {
 	if (!email || !password) {
-		return 'Email and Password are required'
+		return { success: false, message: 'Email and Password are required' }
 	}
 
 	try {
@@ -44,7 +44,7 @@ export async function login( email, password, user_type ) {
 			
 
 			if (!isPasswordCorrect) {
-				return 'Invalid email or password'
+				return { success: false, message: 'Invalid Credentials' }
 			}
 	
 
@@ -65,9 +65,9 @@ export async function login( email, password, user_type ) {
 				maxAge: 60 * 60 * 24, // 1 day
 			  });
 	
-			return 'Login successful'
+			return{ success: true, message: 'Login successful' }
 		} else {
-			return 'Invalid email or password'
+			return { success: false, message: 'Invalid Credentials' }
 		}
 
 		

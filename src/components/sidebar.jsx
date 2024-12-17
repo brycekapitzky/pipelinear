@@ -1,6 +1,6 @@
 'use client'
 
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useState } from 'react'
 import {
 	IconButton,
 	Box,
@@ -23,47 +23,47 @@ import {
 	FaUsers,
 	FaRegNewspaper,
 } from 'react-icons/fa'
+import { Modal } from "@/components/ui/modal"
 
 import {
 	MdOutlineNewspaper,
 	MdOutlineAccessTime
 } from "react-icons/md";
 
-import {
-	LuUserCog
-} from 'react-icons/lu'
+import { GrLogout } from "react-icons/gr"
+import { signout as signout_action } from '@/app/api/auth/actions'
 import { useRouter, usePathname } from 'next/navigation';
 
 const LinkItems =
-	{
-		'vendors': [
-			{ name: 'Home', icon: FaHome, url: '/vendors' },
-			{ name: 'Database', icon: FaServer, url: '/vendors/databases' },
-			{ name: 'Profile', icon: FaUser, url: '/vendors/profile' },
-			{ name: 'Team', icon: FaUsers, url: '/vendors/team' },
-			{ name: 'Billing', icon: FaMoneyBillWave, url: '/vendors/billing' },
-			{ name: 'Referrals', icon: FaHandshake, url: '/vendors/referrals' },
-		],
-		'prospects': [
-			{ name: 'Home', icon: FaHome, url: '/prospects' },
-			{ name: 'Vendors', icon: FaStore, url: '/prospects/vendors' },
-			{ name: 'Proposals', icon: FaRegNewspaper, url: '/prospects/proposals' },
-			{ name: 'Referrals', icon: FaHandshake, url: "/prospects/referrals" },
-		],
-		'sales_manager': [
-			{ name: 'Proposal Manager', icon: FaHome, url: '/sales' },
-			{ name: 'Vendors', icon: FaStore, url: '/sales/vendors' },
-			{ name: 'Prospects', icon: FaRegNewspaper, url: '/sales/prospects' },
-			{ name: 'Meetings', icon: MdOutlineAccessTime, url: '/sales/meetings' },
-			{ name: 'Onboarding', icon: FaHome, url: '/sales/onboarding' },
-			{ name: 'Posts', icon: MdOutlineNewspaper, url: '/sales/posts' },
-		]
-	}
+{
+	'vendors': [
+		{ name: 'Home', icon: FaHome, url: '/vendors' },
+		{ name: 'Database', icon: FaServer, url: '/vendors/databases' },
+		{ name: 'Profile', icon: FaUser, url: '/vendors/profile' },
+		{ name: 'Team', icon: FaUsers, url: '/vendors/team' },
+		{ name: 'Billing', icon: FaMoneyBillWave, url: '/vendors/billing' },
+		{ name: 'Referrals', icon: FaHandshake, url: '/vendors/referrals' },
+	],
+	'prospects': [
+		{ name: 'Home', icon: FaHome, url: '/prospects' },
+		{ name: 'Vendors', icon: FaStore, url: '/prospects/vendors' },
+		{ name: 'Proposals', icon: FaRegNewspaper, url: '/prospects/proposals' },
+		{ name: 'Referrals', icon: FaHandshake, url: "/prospects/referrals" },
+	],
+	'sales_manager': [
+		{ name: 'Proposal Manager', icon: FaHome, url: '/sales' },
+		{ name: 'Vendors', icon: FaStore, url: '/sales/vendors' },
+		{ name: 'Prospects', icon: FaRegNewspaper, url: '/sales/prospects' },
+		{ name: 'Meetings', icon: MdOutlineAccessTime, url: '/sales/meetings' },
+		{ name: 'Onboarding', icon: FaHome, url: '/sales/onboarding' },
+		{ name: 'Posts', icon: MdOutlineNewspaper, url: '/sales/posts' },
+	]
+}
 
-export default function SimpleSidebar({ children, user_type }) {
+export default function SimpleSidebar({ children, username, user_type }) {
 	const { isOpen, onOpen, onClose } = useDisclosure()
 
-	console.info( LinkItems)
+	console.info(LinkItems)
 	return (
 		<Box minH="100vh" bg="gray.100">
 			<SidebarContent
@@ -84,7 +84,7 @@ export default function SimpleSidebar({ children, user_type }) {
 			</Drawer.Root>
 			<MobileNav display={{ base: 'flex', md: 'none' }} onOpen={onOpen} />
 			<Box ml={{ base: 0, md: 60 }} p={4} >
-				<Header />
+				<Header username={username} />
 				<Flex p={3} mx={4}>
 					{children}
 				</Flex>
@@ -93,7 +93,16 @@ export default function SimpleSidebar({ children, user_type }) {
 	)
 }
 
-const Header = () => {
+
+const Header = ({ username }) => {
+	const [ openLogoutModal, setOpenLogoutModal ] = useState()
+	const router = useRouter()
+
+	const logout =  async () => {
+		await signout_action()
+		router.push( '/login' )
+	}
+
 	return (
 		<Flex
 			w="100%"
@@ -108,9 +117,21 @@ const Header = () => {
 					width={150}
 				/>
 			</Box>
-			<Box fontSize={30} cursor={'pointer'}>
-				<LuUserCog />
-			</Box>
+			<Flex fontSize={20} cursor={'pointer'} alignItems={'center'} onClick={() => setOpenLogoutModal(true)}>
+				<Text mr={2}> {username || "User"}</Text>
+				<GrLogout size={'25'} ml={2} />
+			</Flex>
+
+			<Modal
+				toggleModal={openLogoutModal}
+				getModalState={e => setOpenLogoutModal(e)}
+				onSubmit={logout}
+				submitText="Logout"
+				title={`Logging out`}
+			>
+				<Text> Are you sure to sign off ?</Text>
+			</Modal>
+
 		</Flex>
 	)
 }
@@ -139,13 +160,13 @@ const NavItem = ({ link, children }) => {
 	const router = useRouter()
 	const pathname = usePathname()
 
-	const gotoLink = ( link ) => {
-		router.push( link )
+	const gotoLink = (link) => {
+		router.push(link)
 	}
 
 	return (
 		<Box
-			onClick={() => gotoLink( link )}
+			onClick={() => gotoLink(link)}
 			style={{ textDecoration: 'none' }}
 			_focus={{ boxShadow: 'none' }}>
 			<Flex
@@ -155,8 +176,8 @@ const NavItem = ({ link, children }) => {
 				mt={3}
 				borderRadius="lg"
 				borderColor={"gray.200"}
-				bgColor={ pathname == link ? 'black' : 'white'}
-				color={ pathname == link ? 'white' : 'black' }
+				bgColor={pathname == link ? 'black' : 'white'}
+				color={pathname == link ? 'white' : 'black'}
 				borderWidth={2}
 				role="group"
 				cursor="pointer"
