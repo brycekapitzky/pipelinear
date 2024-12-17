@@ -5,12 +5,34 @@ import { Field } from "@/components/ui/field"
 import { Button } from '@/components/ui/button'
 import { RiUserSharedLine , RiUserAddLine } from 'react-icons/ri'
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { login as login_action } from '@/app/api/auth/actions'
 
 export default function LoginForm({ user_type }) {
 	const router = useRouter()
+	const [ loginForm, setLoginForm ] = useState( {
+		email: "",
+		password: ""
+	})
 
 	const gotoDashboard = () => {
 		router.push( `/${user_type}`)
+	}
+
+	const loginAction = async ( ev ) => {
+		ev.preventDefault()
+
+		try {
+			const { email, password } = loginForm
+
+			const res = await login_action( email, password, user_type )
+
+			router.push( `/${user_type}`)
+
+			console.info( 'res is ? ', res )
+		} catch ( err ) {
+			console.info( 'error occured ', err )
+		}
 	}
 
 	return (
@@ -38,11 +60,14 @@ export default function LoginForm({ user_type }) {
 						w="450px"
 						mt={5}
 					>
+						<form onSubmit={loginAction}>
 						<Card.Body gap={3} >
 							<Stack w="full" gap={6}>
 								<Field label="What's your email ?">
 									<Input
 									 p={2}
+									 onChange={e => setLoginForm({ ...loginForm, email: e.target.value })}
+									 value={loginForm?.email}
 									 border="1px solid #c4c4c4"
 									 placeholder='Enter your email' />
 								</Field>
@@ -50,6 +75,8 @@ export default function LoginForm({ user_type }) {
 									<Input
 									 p={2}
 									 type='password'
+									 onChange={e => setLoginForm({ ...loginForm, password: e.target.value })}
+									 value={loginForm?.password}
 									 border="1px solid #c4c4c4"
 									 placeholder='Enter password' />
 								</Field>
@@ -58,9 +85,9 @@ export default function LoginForm({ user_type }) {
 										<Button
 											backgroundColor="black"
 											w="100%"
-											onClick={() => gotoDashboard()}
 											color="white"
 											py={5}
+											type="submit"
 											variant="subtle"
 											fontSize="12px"
 										> <RiUserSharedLine /> Login </Button>
@@ -71,6 +98,8 @@ export default function LoginForm({ user_type }) {
 								</Flex>
 							</Stack>
 						</Card.Body>
+						</form>
+					
 					</Card.Root>
 				</Flex>
 			</GridItem>

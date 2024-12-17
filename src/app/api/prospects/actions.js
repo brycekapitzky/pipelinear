@@ -1,5 +1,6 @@
 'use server'
 import prisma from "@/app/api/lib/db"
+import { verifyToken } from '@/app/api/lib/auth'
 
 export async function add_prospect({
 	prospect_last_name,
@@ -21,7 +22,8 @@ export async function add_prospect({
 	prospect_location,
 	prospect_linkedin_profile,
 	prospect_onboarding_week,
-	prospect_timezone
+	prospect_timezone,
+	prospect_password_hash
 }) {
 	return await prisma.prospects.create({
 		data: {
@@ -45,6 +47,7 @@ export async function add_prospect({
 			prospect_linkedin_profile: prospect_linkedin_profile,
 			prospect_onboarding_week: prospect_onboarding_week,
 			prospect_timezone: prospect_timezone,
+			prospect_password_hash: prospect_password_hash,
 			prospect_processed: false,
 			prospect_status: "pending",
 			prospect_created: new Date(),
@@ -116,7 +119,7 @@ export async function delete_prospect({
 	})
 }
 
-export async function get_all_prospect(){
+export async function get_all_prospect() {
 	const records = await prisma.prospects.findMany({
 	})
 	return records

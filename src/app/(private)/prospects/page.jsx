@@ -1,13 +1,30 @@
 import ProspectsProposalsLayout from "@/app/layouts/ProspectsProposalsLayout.jsx/layout";
 import ProspectsDashboard from "@/components/pages/dashboard/prospect-dashboard";
 
-export const metadata  = {
+import { redirect } from "next/navigation"
+import { cookies } from "next/headers"
+import { verifyToken } from "@/app/api/lib/auth"
+
+export const metadata = {
 	title: "Prospects Page"
 }
 
-export default function ProspectsPage() {
-	return ( 
-	<ProspectsProposalsLayout> 
-		<ProspectsDashboard />
-	</ProspectsProposalsLayout>)
+export default async function ProspectsPage() {
+	const cookieStore = await cookies()
+	const session = cookieStore.get('session')
+
+	if (session && session.value) {
+		const { user_type } = await verifyToken(session.value)
+
+		if (user_type == 'prospects') {
+			return (
+				<ProspectsProposalsLayout>
+					<ProspectsDashboard />
+				</ProspectsProposalsLayout>)
+		} else {
+			redirect( `/${user_type}`)
+		}
+	} else {
+		return redirect('/login')
+	}
 }

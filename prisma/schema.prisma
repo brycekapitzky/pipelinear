@@ -27,6 +27,7 @@ model Prospects {
 	prospect_id							String @id @default(uuid())
 	prospect_status						String
 	prospect_first_name					String
+	prospect_password_hash				String
 	prospect_last_name					String
 	prospect_full_name					String
 	prospect_job_title					String
@@ -55,6 +56,7 @@ model Prospects {
 model SalesManager {
 	manager_id				String @id @default(uuid())
 	manager_name			String
+	manager_password_hash	String
 
 	proposals				Proposal[]
 }
@@ -63,7 +65,9 @@ model Clients {
 	client_id					String @id @default(uuid())
 	client_full_name			String
 	client_company_name			String
+	client_password_hash		String
 	client_company_website		String
+	client_personal_email		String
 	client_email				String
 	client_phone_number			String
 	client_calendly				String

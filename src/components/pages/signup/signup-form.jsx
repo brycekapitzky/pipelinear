@@ -215,7 +215,7 @@ This information is maintained in a database until we find a vendor that closely
 						variant="elevated"
 						borderRadius="2px"
 						size="lg"
-						w={{ base: "97%", md: "800px"}}
+						w={{ base: "97%", md: user_type == 'prospects' ? "800px" : '90%'}}
 						mt={5}
 					>
 						<Card.Body gap={3} >

@@ -2,6 +2,7 @@
 
 import Stepper from '@/components/ui/stepper'
 import { useState, useEffect } from 'react'
+import bcrypt from 'bcryptjs'
 import { Field } from "@/components/ui/field"
 import { Input, Flex, Box, Text, Textarea, Button } from '@chakra-ui/react'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -16,6 +17,8 @@ function PersonalDetailsForm({ get_values, hidden }) {
 	const [personalDetailsForm, setPersonalDetailsForm] = useState(
 		{
 			firstName: '',
+			password: '',
+			confirm_password: '',
 			lastName: '',
 			linkedin: '',
 			emailAddress: ''
@@ -42,14 +45,41 @@ function PersonalDetailsForm({ get_values, hidden }) {
 					placeholder='Enter your first name' />
 			</Field>
 
+		
+
 			<Field label="What's your last name ?">
 				<Input
 					p={2}
 					border="1px solid #c4c4c4"
 					name='last_name'
+					type='text'
 					value={personalDetailsForm?.lastName}
 					onChange={e => setPersonalDetailsForm({ ...personalDetailsForm, lastName: e.target.value })}
 					placeholder='Enter your last name' />
+			</Field>
+		</Flex>
+
+		<Flex flexDirection={{ base: "column", md: "row" }} alignItems="end" gap={5} pt={5} display={ !hidden ? 'none': 'flex'}>
+		<Field label="What's your password ?">
+				<Input
+					p={2}
+					border="1px solid #c4c4c4"
+					name='prospect_password'
+					type='password'
+					value={personalDetailsForm?.password}
+					onChange={e => setPersonalDetailsForm({ ...personalDetailsForm, password: e.target.value })}
+					placeholder='Enter your password' />
+			</Field>
+
+			<Field label="Confirm your password">
+				<Input
+					p={2}
+					border="1px solid #c4c4c4"
+					name='confirm_password'
+					type='password'
+					value={personalDetailsForm?.confirm_password}
+					onChange={e => setPersonalDetailsForm({ ...personalDetailsForm, confirm_password: e.target.value })}
+					placeholder='Confirm your password' />
 			</Field>
 		</Flex>
 
@@ -245,8 +275,10 @@ export default function ProspectSignup() {
 		{
 			firstName: '',
 			lastName: '',
+			password: '',
 			linkedin: '',
-			emailAddress: ''
+			emailAddress: '',
+			confirm_password: '',
 		}
 	)
 	const [companyForm, setCompanyForm] = useState(
@@ -290,9 +322,11 @@ export default function ProspectSignup() {
 	const submitForm = async () => {
 		setLoading( true )
 
-		const { firstName, lastName, linkedin, emailAddress } = personalDetailsForm
+		const { firstName, lastName, linkedin, emailAddress, password } = personalDetailsForm
 		const { company_headcount, company_name, company_position, company_website } = companyForm
 		const { phone_number, other_services, frequency, notes } = hyperVendorForm
+
+		const hashed_password = await bcrypt.hash( password, 10 )
 
 		const record = await add_prospect({
 			prospect_last_name: firstName,
@@ -309,6 +343,7 @@ export default function ProspectSignup() {
 			prospect_frequency: frequency.join(','),
 			prospect_other_services: other_services.join(','),
 			prospect_date_submitted: new Date(),
+			prospect_password_hash: hashed_password,
 		})
 
 		router.push( '/sales/prospects')

@@ -12,11 +12,13 @@ import {
 	delete_vendor as delete_vendor_action,
 	get_all_vendor as get_all_vendor_action
 } from '@/app/api/vendors/actions'
-import { useRouter } from 'next/navigation';
+import { login as login_action } from '@/app/api/auth/actions'
+import { useRouter } from 'next/navigation'
+import bcrypt from 'bcryptjs'
 
 
 function InitialAgreementForm({ get_values, hidden }) {
-	return <Box display={ !hidden ? 'none': 'initial'}>
+	return <Box display={!hidden ? 'none' : 'initial'}>
 		<Text textAlign={'justify'}> {`1. Pipelinear operates a sales team that primarily prospects cold outreach sales channels.`} </Text>
 		<Text textAlign={'justify'}> {`2. We ask prospects to have deep-dive 30-min interview with us in exchange for an incentive to learn ongoing initiatives.`} </Text>
 		<Text textAlign={'justify'}> {`3. We book sales meetings with target market prospects that are buying what our client's offer`} </Text>
@@ -31,6 +33,53 @@ function InitialAgreementForm({ get_values, hidden }) {
 	</Box>
 }
 
+function PersonalInfoForm({ get_values, hidden }) {
+
+	const [ personalInfo, setPersonalInfo ] = useState({
+		client_personal_email: '',
+		client_password: '',
+		confirm_password: ''
+	})
+
+	useEffect(() => {
+		if ( get_values ) {
+			get_values({
+				...personalInfo
+			})
+		}
+	}, [personalInfo])
+
+	return <Box display={!hidden ? 'none' : 'initial'}>
+		<Field label="What is your perosnal email address?" mt={5}>
+			<Input
+				p={2}
+				border="1px solid #c4c4c4"
+				type='text'
+				value={personalInfo?.client_personal_email}
+				onChange={e => setPersonalInfo({ ...personalInfo, client_personal_email: e.target.value })}
+				placeholder='Enter email address' />
+		</Field>
+		<Field label="Enter your password" mt={5}>
+			<Input
+				p={2}
+				border="1px solid #c4c4c4"
+				type='password'
+				value={personalInfo?.client_full_name}
+				onChange={e => setPersonalInfo({ ...personalInfo, client_password: e.target.value })}
+				placeholder='Enter password' />
+		</Field>
+		<Field label="Confirm your password" mt={5}>
+			<Input
+				p={2}
+				border="1px solid #c4c4c4"
+				type='password'
+				value={personalInfo?.client_full_name}
+				onChange={e => setPersonalInfo({ ...personalInfo, confirm_password: e.target.value })}
+				placeholder='Enter password' />
+		</Field>
+	</Box>
+}
+
 function CompanyDetailsForm({ get_values, hidden }) {
 	const [companyForm, setCompanyForm] = useState({
 		client_full_name: '',
@@ -42,13 +91,13 @@ function CompanyDetailsForm({ get_values, hidden }) {
 	})
 
 	useEffect(() => {
-		if ( get_values ) {
+		if (get_values) {
 			get_values({
 				...companyForm
 			})
 		}
 	}, [companyForm])
-	return <Flex display={ !hidden ? 'none': 'flex'} flexDirection={'column'}>
+	return <Flex display={!hidden ? 'none' : 'flex'} flexDirection={'column'}>
 		<Box>
 			<Text textAlign={"justify"}> What would you like to sign up for? </Text>
 			<RadioGroup
@@ -136,13 +185,13 @@ function MarketingDetialsForm({ get_values, hidden }) {
 	})
 
 	useEffect(() => {
-		if ( get_values ) {
+		if (get_values) {
 			get_values({
 				...marketingDetailsForm
 			})
 		}
-	}, [ marketingDetailsForm ])
-	return <Flex display={ !hidden ? 'none' : 'flex'} flexDirection={'column'}>
+	}, [marketingDetailsForm])
+	return <Flex display={!hidden ? 'none' : 'flex'} flexDirection={'column'}>
 		<Field
 			mt={5}
 			label="What is your most compelling value proposition?"
@@ -174,7 +223,7 @@ function MarketingDetialsForm({ get_values, hidden }) {
 		<CheckboxList
 			mt={5}
 			header={"What is your ideal target's company headcount ?"}
-			getSelectedChoices={(e) => setMarketingDetailsForm({ ...marketingDetailsForm, client_headcount: e.join( ',' ) }) }
+			getSelectedChoices={(e) => setMarketingDetailsForm({ ...marketingDetailsForm, client_headcount: e.join(',') })}
 			items={
 				[
 					{ label: "1-10 headcount", value: "1-10 headcount" },
@@ -206,7 +255,7 @@ function MarketingDetialsForm({ get_values, hidden }) {
 				border="1px solid #c4c4c4"
 				type='text'
 				value={marketingDetailsForm?.client_calendly}
-				onChange={ e => setMarketingDetailsForm({ ...marketingDetailsForm, client_calendly: e.target.value })}
+				onChange={e => setMarketingDetailsForm({ ...marketingDetailsForm, client_calendly: e.target.value })}
 				placeholder='A scheduling or Calendly link is required to work with us.' />
 		</Field>
 
@@ -228,15 +277,15 @@ function MarketingDetialsForm({ get_values, hidden }) {
 
 function TermsAndPrivacy({ get_values, hidden }) {
 
-	const [ termsAndPrivacy, setTermsAndPrivacy ] = useState( false )
+	const [termsAndPrivacy, setTermsAndPrivacy] = useState(false)
 
-	useEffect( () => {
-		if ( get_values ) {
-			get_values( termsAndPrivacy )
+	useEffect(() => {
+		if (get_values) {
+			get_values(termsAndPrivacy)
 		}
-	}, [ termsAndPrivacy ])
+	}, [termsAndPrivacy])
 
-	return <Flex display={ !hidden ? 'none' : 'flex' } flexDirection={'column'}>
+	return <Flex display={!hidden ? 'none' : 'flex'} flexDirection={'column'}>
 		<Text>
 			Read the <span> Terms of Service </span> & <span> Privacy Policy </span>
 		</Text>
@@ -244,7 +293,7 @@ function TermsAndPrivacy({ get_values, hidden }) {
 		<RadioGroup
 			mt={3}
 			orientation="horizontal"
-			getSelectedChoice={e => setTermsAndPrivacy( e )}
+			getSelectedChoice={e => setTermsAndPrivacy(e)}
 			options={[
 				{ label: "I accept", value: true },
 				{ label: "I don't accept", value: false }
@@ -254,15 +303,15 @@ function TermsAndPrivacy({ get_values, hidden }) {
 }
 
 function ExpectationAlignment({ get_values, hidden }) {
-	const [ exceptionAlignment, setExceptionalAlignment ] = useState()
+	const [exceptionAlignment, setExceptionalAlignment] = useState()
 
 	useEffect(() => {
-		if ( get_values ) {
-			get_values( exceptionAlignment )
+		if (get_values) {
+			get_values(exceptionAlignment)
 		}
-	}, [ exceptionAlignment ])
+	}, [exceptionAlignment])
 
-	return <Flex display={ !hidden ? 'none' : 'flex' } flexDirection={'column'}>
+	return <Flex display={!hidden ? 'none' : 'flex'} flexDirection={'column'}>
 		<Text textAlign={'justify'}>
 			PipeLinear offers incentives like Amazon eGift cards to prospects to have a 30 minute interview about services company goals and purchasing processes.
 
@@ -281,12 +330,13 @@ function ExpectationAlignment({ get_values, hidden }) {
 }
 
 export default function VendorSignup() {
-	const [ companyDetailsForm, setCompanyDetailsForm] = useState()
-	const [ marketingDetailsForm, setMarketingDetailsForm ] = useState()
-	const [ initialAgreement, setInitialAgreement ] = useState()
-	const [ termsPrivacy, setTermsPrivacy ] = useState()
-	const [ currentStep , setCurrentStep ] = useState( 1 )
-	const [ loading, setLoading ] = useState( false )
+	const [companyDetailsForm, setCompanyDetailsForm] = useState()
+	const [marketingDetailsForm, setMarketingDetailsForm] = useState()
+	const [initialAgreement, setInitialAgreement] = useState()
+	const [personalInfoForm, setPersonalInfoForm] = useState()
+	const [termsPrivacy, setTermsPrivacy] = useState()
+	const [currentStep, setCurrentStep] = useState(1)
+	const [loading, setLoading] = useState(false)
 	const router = useRouter()
 
 	const steps = [
@@ -297,62 +347,83 @@ export default function VendorSignup() {
 				key={1}
 				hidden={currentStep == 1}
 				get_values={e => setInitialAgreement(e)}
-				/> 
+			/>
 		},
 		{
 			id: 2,
-			label: "Company Profile",
-			component: <CompanyDetailsForm
+			label: "Personal Information",
+			component: <PersonalInfoForm
 				key={2}
 				hidden={currentStep == 2}
-				get_values={e => setCompanyDetailsForm(e) }
-				/> 
+				get_values={e => setPersonalInfoForm(e)}
+			/>
 		},
 		{
 			id: 3,
-			label: "Market Profile",
-			component: <MarketingDetialsForm
+			label: "Company Profile",
+			component: <CompanyDetailsForm
 				key={3}
 				hidden={currentStep == 3}
-				get_values={e => setMarketingDetailsForm(e) }
-				/> 
+				get_values={e => setCompanyDetailsForm(e)}
+			/>
 		},
 		{
 			id: 4,
-			label: "Terms of Service & Privacy Policy",
-			component: <TermsAndPrivacy
+			label: "Market Profile",
+			component: <MarketingDetialsForm
 				key={4}
 				hidden={currentStep == 4}
-				get_values={e => setTermsPrivacy(e)}
-				/> 
+				get_values={e => setMarketingDetailsForm(e)}
+			/>
 		},
 		{
 			id: 5,
+			label: "Terms of Service & Privacy Policy",
+			component: <TermsAndPrivacy
+				key={5}
+				hidden={currentStep == 5}
+				get_values={e => setTermsPrivacy(e)}
+			/>
+		},
+		{
+			id: 6,
 			label: "Expectation Alignment",
-			component: <ExpectationAlignment key={5} hidden={currentStep == 5} />
+			component: <ExpectationAlignment
+				key={6}
+				hidden={currentStep == 6} />
 		}
 
 	]
 
 	const submitForm = async () => {
-		setLoading ( true )
-		console.info( companyDetailsForm )
-		console.info( marketingDetailsForm )
+		setLoading(true)
+
+		console.info(companyDetailsForm)
+		console.info(marketingDetailsForm)
+
+		const {
+			client_personal_email,
+			client_password
+		} = personalInfoForm
+
+		const hashed_password = await bcrypt.hash( client_password, 10 )
+
 		const record = await add_vendor_action({
 			...companyDetailsForm,
-			...marketingDetailsForm
+			...marketingDetailsForm,
+			client_password_hash: hashed_password,
+			client_personal_email: client_personal_email
 		})
-		router.push( '/sales/vendors' )
-		setLoading ( false )
-
+		await login_action( client_personal_email, client_password, 'vendors' )
+		router.push('/vendors')
 		console.info(' [added success] record is ', record)
 	}
 
 	return <Stepper
 		steps={steps}
 		getCurrentStep={e => setCurrentStep(e)}
-		loading={ loading }
+		loading={loading}
 		loadingText='Saving record...'
 		onSubmit={() => submitForm()}
-		/>
+	/>
 }

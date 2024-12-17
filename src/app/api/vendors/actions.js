@@ -14,6 +14,8 @@ export async function add_vendor({
 	client_linkedin_profile: client_linkedin_profile,
 	client_value_proposition: client_value_proposition,
 	client_industry: client_industry,
+	client_personal_email: client_personal_email,
+	client_password_hash: client_password_hash
 }) {
 	return await prisma.clients.create({
 		data: {
@@ -28,6 +30,8 @@ export async function add_vendor({
 			client_preferences: client_preferences,
 			client_linkedin_profile: client_linkedin_profile,
 			client_industry: client_industry,
+			client_personal_email: client_personal_email,
+			client_password_hash: client_password_hash
 		}
 	})
 }
