@@ -9,24 +9,20 @@ export const metadata = {
 }
 
 export default async function VendorsPage() {
-	try {
-		const cookieStore = await cookies()
-		const session = cookieStore.get('session') || cookieStore.get( '_vercel_jwt' )
+	const cookieStore = await cookies()
+	const session = cookieStore.get('session') || cookieStore.get('_vercel_jwt')
 
-		if (session && session.value) {
-			const { user_type } = await verifyToken( session.value )
+	if (session && session.value) {
+		const { user_type } = await verifyToken(session.value)
 
-			if (user_type == 'vendors') {
-				return <VendorsLayout>
-					<VendorDashboard />
-				</VendorsLayout>
-			} else {
-				return redirect(`${user_type}`)
-			}
+		if (user_type == 'vendors') {
+			return <VendorsLayout>
+				<VendorDashboard />
+			</VendorsLayout>
 		} else {
-			return redirect('/login')
+			return redirect(`${user_type}`)
 		}
-	} catch (err) {
+	} else {
 		return redirect('/login')
 	}
 }

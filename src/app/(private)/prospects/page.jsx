@@ -10,26 +10,22 @@ export const metadata = {
 }
 
 export default async function ProspectsPage() {
-	try {
-		const cookieStore = await cookies()
-		const session = cookieStore.get('session') || cookieStore.get( '_vercel_jwt' )
-	
-		if (session && session.value) {
-			const { user_type } = await verifyToken(session.value)
-	
-			if (user_type == 'prospects') {
-				return (
-					<ProspectsProposalsLayout>
-						<ProspectsDashboard />
-					</ProspectsProposalsLayout>)
-			} else {
-				redirect( `/${user_type}`)
-			}
+	const cookieStore = await cookies()
+	const session = cookieStore.get('session') || cookieStore.get('_vercel_jwt')
+
+	if (session && session.value) {
+		const { user_type } = await verifyToken(session.value)
+
+		if (user_type == 'prospects') {
+			return (
+				<ProspectsProposalsLayout>
+					<ProspectsDashboard />
+				</ProspectsProposalsLayout>)
 		} else {
-			return redirect('/login')
+			redirect(`/${user_type}`)
 		}
-	} catch ( err ) {
+	} else {
 		return redirect('/login')
 	}
-	
+
 }
