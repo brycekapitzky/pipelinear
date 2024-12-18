@@ -8,19 +8,15 @@ export const metadata = {
 };
 
 export default async function MainLoginPage() {
-	try {
-		const cookieStore = await cookies()
-		const session = cookieStore.get( 'session' )
-	
-		if ( session && session.value ) {
-			const { user_type } = await verifyToken(session.value)
-			redirect( `/${user_type}`)
-		} else {
-			return ( <MainLogin /> )
-		}
-	} catch ( err ) {
-		return ( <MainLogin /> )
+	const cookieStore = await cookies()
+	const session = cookieStore.get('session') || cookieStore.get('_vercel_jwt')
+
+	if (session && session.value) {
+		const { user_type } = await verifyToken(session.value)
+		redirect(`/${user_type}`)
+	} else {
+		return (<MainLogin />)
 	}
-	
+
 
 }

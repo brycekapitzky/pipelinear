@@ -8,18 +8,14 @@ export const metadata = {
 };
 
 export default async function ProspectsSignUp() {
-	try {
-		const cookieStore = await cookies()
-		const session = cookieStore.get('session')
-	
-		if (session && session.value) {
-			const { user_type } = await verifyToken(session.value)
-	
-			redirect(`/${user_type}`)
-		} else {
-			return (<SignupForm user_type={"prospects"} />)
-		}
-	} catch ( err ) {
+	const cookieStore = await cookies()
+	const session = cookieStore.get('session') || cookieStore.get('_vercel_jwt')
+
+	if (session && session.value) {
+		const { user_type } = await verifyToken(session.value)
+
+		redirect(`/${user_type}`)
+	} else {
 		return (<SignupForm user_type={"prospects"} />)
 	}
 
