@@ -113,7 +113,7 @@ export default function SalesMeetingsComponent() {
 			meetings_campaign: Number( meetingForm.meetings_campaign ),
 			meetings_appointment_date: meetingForm.meetings_appointment_date,
 			meetings_screenshot: meetingForm.meetings_screenshot,
-			meetings_notes: meetingForm.meetings_notes,
+			meetings_notes: meetingForm.meetings_notes
 		})
 		await fetchAllMeeting()
 		setOpenEditModal( false )
