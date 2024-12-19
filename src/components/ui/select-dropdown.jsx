@@ -32,7 +32,7 @@ export default function SelectDropdown({ collection, label, getSelectedChoice, l
 		<SelectTrigger>
 			<SelectValueText placeholder={placeholder} />
 		</SelectTrigger>
-		<SelectContent>
+		<SelectContent style={{ zIndex: 10000 }}>
 			{collections_mappable.items.map((item) => (
 				<SelectItem item={item.value} key={item.value} value={item.value}>
 					{item.label}

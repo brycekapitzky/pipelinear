@@ -51,13 +51,23 @@ export const ResizableTable = ({
 										<Table.Body>
 											{currentData.map((item, rowIndex) => (
 												<Table.Row key={rowIndex}>
-													{columns.map((column, index) => (
-														<Table.Cell key={index}>
+													{columns.map((column, index) => {
+														let real_value = ""
+														const parts = column?.value?.split(".")
+
+														if (parts.length > 1) {
+															real_value = item[parts[0]][parts[1]]
+														} else {
+															real_value = item[column.value]
+														}
+
+														return <Table.Cell key={index}>
 															{
-																typeof item[column.value] == 'object' ? new Date(item[column.value]).toLocaleString() : item[column.value]
+																typeof item[column.value] == 'object' ? new Date(item[column.value]).toLocaleString() : real_value
 															}
 														</Table.Cell>
-													))}
+													}
+													)}
 													{
 														editAction ?
 															<Table.Cell w={65}>

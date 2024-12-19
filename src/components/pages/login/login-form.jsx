@@ -19,7 +19,7 @@ export default function LoginForm({ user_type }) {
 	const [errorMsg, setErrorMsg] = useState('')
 
 	const gotoCreateAccount = () => {
-		router.push( `/signup/${user_type}` )
+		window.location.href = `/signup/${user_type}`
 	}
 
 	const loginAction = async (ev) => {
@@ -33,7 +33,7 @@ export default function LoginForm({ user_type }) {
 				const { success, message } = await login_action(email, password, user_type)
 
 				if (success) {
-					router.push(`/${user_type}`)
+					window.location.href = `/${user_type}`
 				} else {
 					console.info('error msg ? ', message)
 					setLoading(false)
