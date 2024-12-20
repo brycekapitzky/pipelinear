@@ -21,7 +21,8 @@ export const Modal = ({
 	children,
 	getModalState,
 	onSubmit,
-	submitText
+	submitText,
+	cancelText = "Cancel"
 }) => {
 	const [open, setOpen] = useState(toggleModal)
 
@@ -46,9 +47,12 @@ export const Modal = ({
 				</DialogBody>
 				<DialogFooter>
 					<DialogActionTrigger asChild>
-						<Button variant="outline">Cancel</Button>
+						<Button variant="outline">{cancelText}</Button>
 					</DialogActionTrigger>
-					<Button onClick={() => onSubmit()}> { submitText ? submitText : 'Save' } </Button>
+					{
+						onSubmit ? <Button onClick={() => onSubmit()}> { submitText ? submitText : 'Save' } </Button> : null
+					}
+					
 				</DialogFooter>
 				<DialogCloseTrigger />
 			</DialogContent>

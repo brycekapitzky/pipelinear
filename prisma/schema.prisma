@@ -70,6 +70,7 @@ model Clients {
 	client_full_name			String
 	client_company_name			String
 	client_password_hash		String
+	client_referral_for			Int?
 	client_company_website		String
 	client_personal_email		String
 	client_email				String

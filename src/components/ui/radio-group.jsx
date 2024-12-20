@@ -3,17 +3,22 @@ import { Radio, RadioGroup as ComponentRadioGroup } from "@/components/ui/radio"
 import { useState, useEffect } from "react"
 
 export const RadioGroup = ({ defaultValue, options, getSelectedChoice, orientation = "horizontal", ...rest }) => {
-	const [ selectedChoice, setSelectedChoice ] = useState( '' )
+	const [ selectedChoice, setSelectedChoice ] = useState( defaultValue || '' )
 
 	useEffect(() => {
 		if ( getSelectedChoice ) {
 			getSelectedChoice( selectedChoice )
 		}
 	}, [ selectedChoice ])
+	
 
 
 	return (
-		<ComponentRadioGroup onValueChange={ e => setSelectedChoice( e ) } defaultValue={defaultValue} {...rest}>
+		<ComponentRadioGroup
+			onValueChange={ e => setSelectedChoice( e ) }
+			value={defaultValue}
+			defaultValue={defaultValue}
+			{...rest}>
 			{
 				<Flex
 					gap={6}
@@ -25,7 +30,6 @@ export const RadioGroup = ({ defaultValue, options, getSelectedChoice, orientati
 						options.map(option =>
 							<Radio
 								key={option.value}
-								
 								value={option.value}> {option.label} </Radio>
 						)
 					}

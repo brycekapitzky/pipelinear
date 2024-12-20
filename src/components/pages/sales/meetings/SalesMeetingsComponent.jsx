@@ -72,8 +72,6 @@ export default function SalesMeetingsComponent() {
 	const fetchProspects = async () => {
 		const records = await get_all_prospect()
 		setProspects(records)
-
-		console.info( 'prospects >>>>> ', records )
 	}
 
 	const fetchVendors = async () => {

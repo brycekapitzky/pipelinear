@@ -87,7 +87,8 @@ function CompanyDetailsForm({ get_values, hidden }) {
 		client_company_website: '',
 		client_email: '',
 		client_phone_number: '',
-		client_linkedin_profile: ''
+		client_linkedin_profile: '',
+		client_referral_for: ''
 	})
 
 	useEffect(() => {
@@ -103,6 +104,7 @@ function CompanyDetailsForm({ get_values, hidden }) {
 			<RadioGroup
 				mt={3}
 				orientation="vertical"
+				getSelectedChoice={e => setCompanyForm({ ...companyForm, client_referral_for: e })}
 				options={[
 					{ label: "Vendor Referral List: $279/confirmed meeting", value: 279 },
 					{ label: "Vendor Referral List: $499/confirmed meeting", value: 499 }
