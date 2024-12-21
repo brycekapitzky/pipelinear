@@ -7,9 +7,9 @@ import { deleteAuthCookies } from '@/app/api/auth/actions'
 export default function LoginExpired() {
 
 	useEffect(() => {
-		// deleteAuthCookies().then( () => {
-		// 	console.log( "Cookies deleted...")
-		// })
+		deleteAuthCookies().then( () => {
+			console.log( "Cookies deleted...")
+		})
 	}, [])
 	
 	return <Flex
@@ -19,6 +19,9 @@ export default function LoginExpired() {
 		alignItems={'center'}
 		justifyContent={'center'}>
 		<Text textAlign={'center'}> Login session expired </Text>
-		<Button w={'50%'}> Go to Login Page </Button>
+		<Button
+			w={'50%'}
+			onClick={() => window.location.href = "/login" }
+		> Go to Login Page </Button>
 	</Flex>
 }

@@ -1,6 +1,5 @@
 'use server'
 import prisma from "@/app/api/lib/db"
-import { verifyToken } from '@/app/api/lib/auth'
 
 export async function add_prospect({
 	prospect_last_name,

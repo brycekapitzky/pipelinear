@@ -1,10 +1,10 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { verifyToken } from "@/app/api/lib/auth"
-import { deleteAuthCookies } from '@/app/api/auth/actions'
+import SalesLoginForm from "@/components/pages/login/sales-form";
 
 export const metadata = {
-	title: 'Vendors Login',
+	title: 'Sales Login',
 };
 
 export default async function SalesLoginPage() {
@@ -17,18 +17,21 @@ export default async function SalesLoginPage() {
 
 		try {
 			 const data = await verifyToken(session.value)
-			 user_type = data.user_type
+			 user_type = data?.user_type || null
 		} catch ( err ) {
 			has_error = true
 		}
 
+		console.info( 'user type is ?? ', user_type )
+ 
 		if ( has_error ) {
 			redirect( '/login/expired' )
 		} else {
+			console.info( 'user type is ?? ', user_type )
 			redirect(`/${user_type}`)
 		}
 
 	} else {
-		redirect( '/login' )
+		return <SalesLoginForm />
 	}
 }

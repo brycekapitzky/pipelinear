@@ -122,3 +122,45 @@ export async function getSessionUser() {
 
 	}
 }
+
+export async function loginManager( email , password ) {
+	const cookieStore = await cookies()
+	try {
+		console.info( email, password )
+		const record = await prisma.salesManager.findFirst({
+			where: {
+				manager_email: email
+			}
+		})
+
+		if ( record ) {
+			const isPasswordCorrect = await bcrypt.compare(
+				password,
+				record.manager_password_hash
+			)
+	
+			if ( !isPasswordCorrect ) {
+				return { success: false, message: 'Invalid Credentials' }
+			}
+	
+			const token = jwt.sign({
+				id: record.manager_id,
+				email: record.manager_email,
+				user_type: 'sales'
+			}, SECRET_KEY, { expiresIn: '5h'})
+	
+			cookieStore.set( 'session', token, {
+				httpOnly: true,
+				secure: true,
+				maxAge: 60 * 60 * 24, // 1 day
+			})
+			return { success: true, message: 'Login successful' }
+		} else {
+			return { success: false, message: 'Invalid Credentials' }
+		}
+
+	} catch ( err ) {
+		console.info( err )
+		return { success: false, message: 'Invalid Credentials' }
+	}
+}

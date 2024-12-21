@@ -60,6 +60,7 @@ model Prospects {
 model SalesManager {
 	manager_id				String @id @default(uuid())
 	manager_name			String
+	manager_email			String
 	manager_password_hash	String
 
 	proposals				Proposal[]
