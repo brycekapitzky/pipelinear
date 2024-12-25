@@ -5,6 +5,9 @@ import { useState, useEffect } from 'react'
 import { Field } from "@/components/ui/field"
 import { Button } from '@/components/ui/button'
 
+import { FilePicker } from '@/components/ui/forms/file-picker'
+import { DatePicker } from '@/components/ui/forms/date-picker'
+
 import SelectDropdown from '@/components/ui/select-dropdown'
 import { get_all_prospect } from '@/app/api/prospects/actions'
 import { get_all_vendor } from '@/app/api/vendors/actions'
@@ -16,6 +19,7 @@ export default function SalesMeetingForm() {
 	const [prospects, setProspects] = useState([])
 	const [vendors, setVendors] = useState([])
 	const [loading, setLoading] = useState(false)
+	const [submitted, setSubmitted] = useState(false)
 	const router = useRouter()
 
 	useEffect(() => {
@@ -34,35 +38,47 @@ export default function SalesMeetingForm() {
 	}
 
 	const [meetingForm, setMeetingForm] = useState({
-		meetings_client_id: '',
-		meetings_appointment_date: '',
-		meetings_prospect_id: '',
-		meetings_notes: '',
-		meetings_team: '',
-		meetings_timezone: '',
-		meetings_campaign: '',
-		meetings_screenshot: '',
+		meetings_client_id: { value: '', error: true },
+		meetings_appointment_date: { value: '', error: true },
+		meetings_prospect_id: { value: '', error: true },
+		meetings_notes: { value: '', error: false },
+		meetings_team: { value: '', error: true },
+		meetings_timezone: { value: '', error: true },
+		meetings_campaign: { value: '', error: true },
+		meetings_screenshot: { value: '', error: true },
 	})
 
-	const teams = [
-		{ label: 'Team 1', value: 'Team 1' },
-		{ label: 'Team 2', value: 'Team 2' },
-		{ label: 'Team 3', value: 'Team 3' }
-	]
+	const fieldsHasError = () => {
+		return Object.values(meetingForm).some(item => item.error === true)
+	}
 
 	const submitMeetingForm = async (ev) => {
 		ev.preventDefault()
-		setLoading(true)
-		try {
-			const res = await add_meeting_action({
-				...meetingForm
-			})
-			console.info('res is ?? ', res)
-			router.push( '/sales/meetings' )
-			setLoading(false)
-		} catch (err) {
-			console.error('Error adding meeting: ', err)
+		setSubmitted(true)
+
+		console.info( 'meeting form >> ', meetingForm )
+		if (!fieldsHasError()) {
+			setLoading(true)
+			try {
+				const res = await add_meeting_action({
+					meetings_appointment_date: meetingForm.meetings_appointment_date.value,
+					meetings_screenshot: meetingForm.meetings_screenshot.value,
+					meetings_client_id: meetingForm.meetings_client_id.value,
+					meetings_prospect_id: meetingForm.meetings_prospect_id.value,
+					meetings_team: meetingForm.meetings_team.value,
+					meetings_timezone: meetingForm.meetings_timezone.value,
+					meetings_campaign: meetingForm.meetings_campaign.value,
+					meetings_notes: meetingForm.meetings_notes.value
+				})
+
+				console.info( 'res is ? ', res )
+				router.push('/sales/meetings')
+				setLoading(false)
+			} catch (err) {
+				console.error('Error adding meeting: ', err)
+			}
 		}
+
 	}
 
 	const convertImageToBase64 = (ev) => {
@@ -88,28 +104,28 @@ export default function SalesMeetingForm() {
 
 	function formatToISO(dateString) {
 		// Parse the date string into a Date object
-		console.info( 'what is date str >>>> ', dateString )
-		if ( dateString ) {
+		console.info('what is date str >>>> ', dateString)
+		if (dateString) {
 			const date = new Date(dateString);
-	  
+
 			// Check if the date is valid
 			if (!isNaN(date.getTime())) {
-			  // Format the date to the required format: yyyy-MM-ddThh:mm
-			  const year = date.getFullYear();
-			  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-			  const day = String(date.getDate()).padStart(2, '0');
-			  const hours = String(date.getHours()).padStart(2, '0');
-			  const minutes = String(date.getMinutes()).padStart(2, '0');
-		  
-			  // Return formatted date
-			  return `${year}-${month}-${day}T${hours}:${minutes}`;
+				// Format the date to the required format: yyyy-MM-ddThh:mm
+				const year = date.getFullYear();
+				const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+				const day = String(date.getDate()).padStart(2, '0');
+				const hours = String(date.getHours()).padStart(2, '0');
+				const minutes = String(date.getMinutes()).padStart(2, '0');
+
+				// Return formatted date
+				return `${year}-${month}-${day}T${hours}:${minutes}`;
 			} else {
-			  throw new Error("Invalid date format");
+				throw new Error("Invalid date format");
 			}
 		}
-		
-	  }
-	  
+
+	}
+
 
 	return <Flex w={'100%'} flexDirection={'column'}>
 
@@ -120,8 +136,25 @@ export default function SalesMeetingForm() {
 					collection={prospects}
 					labelProp={'prospect_full_name'}
 					valueProp={'prospect_id'}
+					submitted={submitted}
+					fieldName={'Prospect'}
+					required
 					label={'Pick a prospect'}
-					getSelectedChoice={e => setMeetingForm({ ...meetingForm, meetings_prospect_id: e?.value[0] })}
+					isValid={e => setMeetingForm(prevState => ({
+						...prevState,
+						meetings_prospect_id: {
+							...prevState.meetings_prospect_id,
+							error: e
+						}
+					}))}
+					getSelectedChoice={e => setMeetingForm(prevState => ({
+						...prevState,
+						meetings_prospect_id: {
+							...prevState.meetings_prospect_id,
+							value: e?.value[0],
+						}
+					}))
+					}
 				/>
 
 				<SelectDropdown
@@ -129,7 +162,27 @@ export default function SalesMeetingForm() {
 					labelProp={'client_full_name'}
 					valueProp={'client_id'}
 					label={'Pick a vendor'}
-					getSelectedChoice={e => setMeetingForm({ ...meetingForm, meetings_client_id: e?.value[0] })}
+					fieldName={'Vendor'}
+					submitted={submitted}
+					required
+					isValid={e =>
+						setMeetingForm(prevState => ({
+							...prevState,
+							meetings_client_id: {
+								...prevState.meetings_client_id,
+								error: e
+							}
+						}))
+					}
+					getSelectedChoice={
+						e => setMeetingForm(prevState => ({
+							...prevState,
+							meetings_client_id: {
+								...prevState.meetings_client_id,
+								value: e?.value[0],
+							}
+						}))
+					}
 				/>
 
 				<SelectDropdown
@@ -141,21 +194,44 @@ export default function SalesMeetingForm() {
 					]}
 					labelProp={'label'}
 					valueProp={'value'}
-					getSelectedChoice={e => setMeetingForm({ ...meetingForm, meetings_team: e?.value[0] })}
+					fieldName={'Team'}
+					submitted={submitted}
+					required
+					getSelectedChoice={e => setMeetingForm(prevState =>
+					({
+						...prevState,
+						meetings_team: {
+							...prevState.meetings_team,
+							value: e?.value[0]
+						}
+					})
+					)}
 				/>
 			</Flex>
 
 			<Flex flexDirection={{ base: "column", md: 'row' }} mt={5} gap={2}>
-				<Field label="Appointment Date" >
-					<Input
-						p={2}
-						border="1px solid #c4c4c4"
-						type='datetime-local'
-						name='meetings_appointment_date'
-						value={formatToISO( meetingForm?.meetings_appointment_date ) }
-						onChange={e => setMeetingForm({ ...meetingForm, meetings_appointment_date: new Date( e.target.value ) })}
-						placeholder='Enter appointment date' />
-				</Field>
+				<DatePicker
+					fieldName={'Appointment Date'}
+					label={'Appointment Date'}
+					name={'meetings_appointment_date'}
+					submitted={submitted}
+					required
+					isValid={ e => setMeetingForm( prevState => ({
+						...prevState,
+						meetings_appointment_date: {
+							...prevState.meetings_appointment_date,
+							error: e
+						}
+						}))}
+					getSelectedDate={ e => setMeetingForm( prevState => ({
+						...prevState,
+						meetings_appointment_date: {
+							...prevState.meetings_appointment_date,
+							value: e
+						}
+						}))
+					}
+				/>
 				<SelectDropdown
 					label="Pick a Timezone"
 					collection={[
@@ -166,21 +242,52 @@ export default function SalesMeetingForm() {
 						{ label: 'HAST (GMT-10)', value: 'HAST' }
 					]}
 					labelProp={'label'}
+					fieldName='Timezone'
 					valueProp={'value'}
-					getSelectedChoice={e => setMeetingForm({ ...meetingForm, meetings_timezone: e?.value[0] })}
+					required
+					submitted={submitted}
+					isValid={e => setMeetingForm({
+						...meetingForm,
+						meetings_timezone: {
+							value: meetingForm?.meetings_timezone?.value,
+							error: e
+						}
+					})}
+					getSelectedChoice={e => setMeetingForm({
+						...meetingForm,
+						meetings_timezone: {
+							...meetingForm?.meetings_timezone,
+							value: e?.value[0],
+						}
+					})}
 				/>
 			</Flex>
 
-			<Field label="Appointment calendar screenshot" mt={3}>
-				<Input
-					p={2}
-					border="1px solid #c4c4c4"
-					type='file'
-					name='meetings_appointment_date'
-					accept='image/*'
-					onChange={e => convertImageToBase64(e)}
-					placeholder='Enter appointment date' />
-			</Field>
+			<FilePicker
+				mt={5}
+				name={'meetings_screenshot'}
+				fieldName={'Appointment calendar screenshot'}
+				accepts='images/*'
+				required
+				submitted={submitted}
+				isValid={ e => setMeetingForm( prevState => ({
+						...prevState,
+						meetings_screenshot: {
+							...prevState.meetings_screenshot,
+							error: e
+						}
+					}))
+				}
+				getSelectedFile={ base64String => setMeetingForm( prevState =>
+					({
+						...prevState,
+						meetings_screenshot: {
+							...prevState.meetings_screenshot,
+							value: base64String
+						}
+					}))
+				}
+			/>
 
 			<Flex flexDirection={{ base: "column", md: 'row' }} gap={2}>
 
@@ -192,8 +299,18 @@ export default function SalesMeetingForm() {
 						{ label: '499.00', value: '499' },
 					]}
 					labelProp={'label'}
+					fieldName='Campaign'
 					valueProp={'value'}
-					getSelectedChoice={e => setMeetingForm({ ...meetingForm, meetings_campaign: e?.value[0] })}
+					submitted={submitted}
+					required
+					getSelectedChoice={e => setMeetingForm( prevState => 
+						({ 
+							...prevState, meetings_campaign: {
+								...prevState.meetings_campaign,
+								value: e?.value[0]
+							}
+						})
+					)}
 				/>
 			</Flex>
 
@@ -204,14 +321,27 @@ export default function SalesMeetingForm() {
 				<Textarea
 					variant="outline"
 					p={2}
-					value={meetingForm?.meetings_notes}
-					onChange={e => setMeetingForm({ ...meetingForm, meetings_notes: e.target.value })}
+					value={meetingForm?.meetings_notes?.value}
+					onChange={e => setMeetingForm( prevState => 
+						({ 
+							...prevState,
+							meetings_notes: {
+								...prevState.meetings_notes,
+								value: e.target.value
+							}
+						}))}
 					placeholder='Enter notes'
 					border="1px solid #c4c4c4"
 				></Textarea>
 			</Field>
 
-			<Flex w={'100%'} justifyContent={'center'}>
+			<Flex
+				w={'100%'}
+				justifyContent={'center'}
+				alignItems={'center'}
+				flexDirection={'column'}
+				p={3}
+			>
 				<Button
 					mt={3}
 					type='submit'

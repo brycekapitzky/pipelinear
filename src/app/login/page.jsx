@@ -12,8 +12,21 @@ export default async function MainLoginPage() {
 	const session = cookieStore.get('session') || cookieStore.get('_vercel_jwt')
 
 	if (session && session.value) {
-		const { user_type } = await verifyToken(session.value)
-		redirect(`/${user_type}`)
+		let user_type = null
+		let has_error = null
+
+		try {
+			const data = await verifyToken(session.value)
+			user_type = data?.user_type || null
+		} catch ( err) {
+			has_error = true
+		}
+
+		if ( has_error ) {
+			return redirect( '/login/expired' )
+		} else {
+			return redirect(`/${user_type}`)
+		}
 	} else {
 		return (<MainLogin />)
 	}

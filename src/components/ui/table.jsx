@@ -25,7 +25,7 @@ export const ResizableTable = ({
 	};
 
 	return (
-		<Box bgColor={'white'} p={3} borderRadius={2} {...rest}>
+		<Box bgColor={'white'} w={'100%'} p={3} borderRadius={2} {...rest}>
 			{
 				data.length == 0 ? 'Empty Records' :
 					<>
@@ -56,9 +56,9 @@ export const ResizableTable = ({
 														const parts = column?.value?.split(".")
 
 														if (parts.length > 1) {
-															real_value = item[parts[0]][parts[1]]
+															real_value = item[parts[0]][parts[1]] || "None"
 														} else {
-															real_value = item[column.value]
+															real_value = item[column.value] || "None"
 														}
 
 														return <Table.Cell key={index}>

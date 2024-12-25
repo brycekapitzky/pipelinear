@@ -9,11 +9,15 @@ import { useState } from 'react';
 import { login as login_action } from '@/app/api/auth/actions'
 import { TiWarning } from "react-icons/ti"
 
+import { EmailField } from '@/components/ui/forms/email-field'
+import { PasswordField } from '@/components/ui/forms/password-field'
+
 export default function LoginForm({ user_type }) {
 	const router = useRouter()
+	const [submitted, setSubmitted] = useState(false)
 	const [loginForm, setLoginForm] = useState({
-		email: "",
-		password: ""
+		email: { value: '', error: true },
+		password: { value: '', error: true }
 	})
 	const [loading, setLoading] = useState(false)
 	const [errorMsg, setErrorMsg] = useState('')
@@ -22,25 +26,39 @@ export default function LoginForm({ user_type }) {
 		window.location.href = `/signup/${user_type}`
 	}
 
+	const fieldsHasError = () => {
+		return Object.values(loginForm).some(item => item.error === true)
+	}
+
 	const loginAction = async (ev) => {
 		ev.preventDefault()
-		if (!loading) {
-			setLoading(true)
-			setErrorMsg("")
-			try {
-				const { email, password } = loginForm
+		setSubmitted(true)
 
-				const { success, message } = await login_action(email, password, user_type)
+		console.info( 'login info >>> ', loginForm )
+		if (!fieldsHasError()) {
+			if (!loading) {
+				setLoading(true)
+				setErrorMsg("")
+				try {
+					const { email, password } = loginForm
 
-				if (success) {
-					window.location.href = `/${user_type}`
-				} else {
-					console.info('error msg ? ', message)
-					setLoading(false)
-					setErrorMsg(message)
+
+					const { success, message } = await login_action(
+						email.value,
+						password.value,
+						user_type
+					)
+
+					if (success) {
+						window.location.href = `/${user_type}`
+					} else {
+						console.info('error msg ? ', message)
+						setLoading(false)
+						setErrorMsg(message)
+					}
+				} catch (err) {
+					console.info('error occured ', err)
 				}
-			} catch (err) {
-				console.info('error occured ', err)
 			}
 		}
 	}
@@ -73,23 +91,52 @@ export default function LoginForm({ user_type }) {
 						<form onSubmit={loginAction}>
 							<Card.Body gap={3} >
 								<Stack w="full" gap={6}>
-									<Field label="What's your email ?">
-										<Input
-											p={2}
-											onChange={e => setLoginForm({ ...loginForm, email: e.target.value })}
-											value={loginForm?.email}
-											border="1px solid #c4c4c4"
-											placeholder='Enter your email' />
-									</Field>
-									<Field label="What's your password?">
-										<Input
-											p={2}
-											type='password'
-											onChange={e => setLoginForm({ ...loginForm, password: e.target.value })}
-											value={loginForm?.password}
-											border="1px solid #c4c4c4"
-											placeholder='Enter password' />
-									</Field>
+									<EmailField
+										label={"What's your email ?"}
+										name={'email'}
+										placeholder='Enter your email'
+										fieldName="Email address"
+										required
+										submitted={submitted}
+										isValid={e => setLoginForm(prevState => ({
+											...prevState,
+											email: {
+												...prevState.email,
+												error: e
+											}
+										}))
+										}
+										getEmailValue={e => setLoginForm(prevState => ({
+											...prevState,
+											email: {
+												...prevState.email,
+												value: e
+											}
+										}))
+										}
+									/>
+									<PasswordField
+										label={"What's your password"}
+										name={'password'}
+										fieldName={'Password'}
+										placeholder='Enter your password'
+										required
+										submitted={submitted}
+										isValid={ e => setLoginForm( prevState =>({
+											...prevState,
+											password: {
+												...prevState.password,
+												error: e
+											}
+										}))}
+										getPasswordValue={ e => setLoginForm( prevState => ({
+											...prevState,
+											password: {
+												...prevState.password,
+												value: e
+											}
+										}))}
+									/>
 									{
 										errorMsg ?
 											<Flex
@@ -100,7 +147,7 @@ export default function LoginForm({ user_type }) {
 												borderRadius={3}
 												py={2}
 												color={'white'}
-												>
+											>
 												<TiWarning /> <Text ml={2}> {errorMsg} </Text>
 											</Flex> : null
 									}
