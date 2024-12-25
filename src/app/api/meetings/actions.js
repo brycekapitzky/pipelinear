@@ -22,7 +22,8 @@ export async function add_meeting({
 			meetings_team: meetings_team,
 			meetings_campaign: Number( meetings_campaign ),
 			meetings_screenshot: meetings_screenshot,
-			meetings_value: 0
+			meetings_value: 0,
+			meetings_p4499_incentive: '499',
 		}
 	})
 }

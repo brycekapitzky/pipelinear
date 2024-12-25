@@ -197,6 +197,14 @@ export default function SalesMeetingForm() {
 					fieldName={'Team'}
 					submitted={submitted}
 					required
+					isValid={ e => setMeetingForm( prevState => ({
+						...prevState,
+						meetings_team: {
+							...prevState.meetings_team,
+							error: e
+						}
+					}))
+					}
 					getSelectedChoice={e => setMeetingForm(prevState =>
 					({
 						...prevState,
@@ -303,6 +311,14 @@ export default function SalesMeetingForm() {
 					valueProp={'value'}
 					submitted={submitted}
 					required
+					isValid={ e => setMeetingForm( prevState => ({
+						...prevState,
+						meetings_campaign: {
+							...prevState.meetings_campaign,
+							error: e
+						}
+					}))
+					}
 					getSelectedChoice={e => setMeetingForm( prevState => 
 						({ 
 							...prevState, meetings_campaign: {
