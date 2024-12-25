@@ -9,7 +9,6 @@ import { useRouter } from 'next/navigation';
 import { loginManager } from '@/app/api/auth/actions'
 import { TiWarning } from "react-icons/ti"
 
-
 export default function SalesLoginForm() {
 	const router = useRouter()
 	const [loginForm, setLoginForm] = useState({

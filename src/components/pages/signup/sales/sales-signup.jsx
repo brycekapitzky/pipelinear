@@ -34,6 +34,8 @@ export default function SalesSignUpForm() {
 
 			const hashed_password = await bcrypt.hash( salesForm.manager_password, 10 )
 		
+			console.info( 'sales form ? ', salesForm )
+			
 			await create_manager_account({
 				manager_email: salesForm.manager_email,
 				manager_password_hash: hashed_password,
