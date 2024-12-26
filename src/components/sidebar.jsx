@@ -48,6 +48,7 @@ const LinkItems =
 		{ name: 'Home', icon: FaHome, url: '/prospects' },
 		{ name: 'Vendors', icon: FaStore, url: '/prospects/vendors' },
 		{ name: 'Proposals', icon: FaRegNewspaper, url: '/prospects/proposals' },
+		{ name: 'Profile', icon: FaUser, url: '/prospects/profile' },
 		{ name: 'Referrals', icon: FaHandshake, url: "/prospects/referrals" },
 	],
 	'sales_manager': [

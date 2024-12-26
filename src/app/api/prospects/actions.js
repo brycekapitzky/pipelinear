@@ -118,6 +118,16 @@ export async function delete_prospect({
 	})
 }
 
+export async function get_single_prospect({
+	prospect_id: prospect_id
+}) {
+	return await prisma.prospects.findUnique({
+		where: {
+			prospect_id: prospect_id
+		}
+	})
+}
+
 export async function get_all_prospect() {
 	const records = await prisma.prospects.findMany({
 	})

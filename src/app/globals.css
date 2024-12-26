@@ -21,9 +21,18 @@ body {
   color: black;
 }
 
+.css-1xhkg6e {
+  color: white;
+}
+
 .css-y5du55:hover {
   color: white;
 }
 .chakra-dialog__content {
   background-color: white;
+}
+
+.chakra-card__body {
+  background-color: white;
+  color: black;
 }

@@ -25,7 +25,7 @@ export const CheckboxList = ({ items, header, getSelectedChoices, ...rest }) => 
 			<CheckboxGroup
 				name="framework">
 
-				<Fieldset.Legend fontSize="sm" mb="2">
+				<Fieldset.Legend fontSize="sm" mb="2" color="black">
 					{header}
 				</Fieldset.Legend>
 				<Fieldset.Content>

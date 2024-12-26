@@ -1,7 +1,6 @@
 'use client';
 
 import { Card, Input, Flex, Image, Grid, GridItem, Stack, Text, Box, Spinner } from '@chakra-ui/react'
-import { Field } from "@/components/ui/field"
 import { Button } from '@/components/ui/button'
 import { RiUserSharedLine, RiUserAddLine } from 'react-icons/ri'
 import { useRouter } from 'next/navigation';
