@@ -190,6 +190,7 @@ export default function ProspectProfileComponent() {
                 prospect_frequency: hyperVendorForm.prospect_frequency.value.join(','),
                 prospect_important_notes: hyperVendorForm.prospect_important_notes.value
             })
+            await getProfile()
             setLoading( false )
         }
     }
