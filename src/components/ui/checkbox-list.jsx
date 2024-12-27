@@ -24,7 +24,9 @@ export const CheckboxList = ({
 	}, [ defaultValues ])
 
 	const handleCheckboxChange = (e, value) => {
-		if (e.target.checked) {
+		console.info( 'unceching >>> ', e  , value )
+		
+		if (e.checked) {
 			setCheckedItems((prev) => [...prev, value]);
 		} else {
 			setCheckedItems((prev) => prev.filter((item) => item !== value));
@@ -47,7 +49,7 @@ export const CheckboxList = ({
 							<Checkbox
 								key={item.value}
 								cursor="pointer"
-								onChange={(e) => handleCheckboxChange(e, item.value)}
+								onCheckedChange={(e) => handleCheckboxChange(e, item.value)}
 								value={item.value}> {item.label} </Checkbox>)
 					}
 				</Fieldset.Content>

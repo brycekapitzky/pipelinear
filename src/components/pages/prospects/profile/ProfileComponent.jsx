@@ -76,6 +76,10 @@ export default function ProspectProfileComponent() {
         prospect_other_services: {
             value: '',
             error: true
+        },
+        prospect_important_notes: {
+            value: '',
+            error: true
         }
 
     })
@@ -135,6 +139,10 @@ export default function ProspectProfileComponent() {
 
         setProspectInfo( prevState => ({
             ...prevState,
+            prospect_id: {
+                ...prevState.prospect_id,
+                value: rec.prospect_id
+            },
             prospect_first_name: {
                 ...prevState.prospect_first_name,
                 value: rec.prospect_first_name
@@ -155,14 +163,38 @@ export default function ProspectProfileComponent() {
 
     }
 
-    const saveChanges = (ev) => {
+    const fieldsHasError = ( form ) => {
+		return Object.values(form).some(item => item.error === true)
+	}
+
+    const saveChanges = async (ev) => {
         ev.preventDefault()
 
         setSubmitted( true )
+        console.info( 'hyperVendorForm info >> ', hyperVendorForm )
+
+        if ( !fieldsHasError (prospectInfo) || !fieldsHasError(companyInfo) || !fieldsHasError(hyperVendorForm) ) {
+            setLoading( true )
+            await edit_prospect({
+                prospect_id: prospectInfo.prospect_id.value,
+                prospect_first_name: prospectInfo.prospect_first_name.value,
+                prospect_last_name: prospectInfo.prospect_last_name.value,
+                prospect_email_address: prospectInfo.prospect_email_address.value,
+                prospect_linkedin_profile: prospectInfo.prospect_linkedin_profile.vaue,
+                prospect_company_name: companyInfo.prospect_company_name.value,
+                prospect_website: companyInfo.prospect_website.value,
+                prospect_phone_number: companyInfo.prospect_phone_number.value,
+                prospect_headcount: companyInfo.prospect_headcount.value,
+                prospect_job_title: companyInfo.prospect_job_title.value,
+                prospect_other_services: hyperVendorForm.prospect_other_services.value.join(','),
+                prospect_frequency: hyperVendorForm.prospect_frequency.value.join(','),
+                prospect_important_notes: hyperVendorForm.prospect_important_notes.value
+            })
+            setLoading( false )
+        }
     }
 
     const getDefaultChecklists = ( defaultList ) => {
-        console.info( 'def list >> ', defaultList)
         return defaultList.includes(',') ? defaultList.split(',') : [defaultList]
     }
 
@@ -432,7 +464,7 @@ export default function ProspectProfileComponent() {
                                     { label: "Productivity software or consultants", value: "Productivity software or consultants" },
                                     { label: "Software or SaaS companies", value: "Software or SaaS companies" },
                                     { label: "Business growth software or consultants", value: "Business growth software or consultants" },
-                                    { label: "CRM, Outreach software or services", value: "CRM, Outreach software or services" },
+                                    { label: "CRM, Outreach software or services", value: "CRM Outreach software or services" },
                                     { label: "Accounting and financial for taxes or cash flow growth", value: "Accounting and financial for taxes or cash flow growth" },
                                     { label: "General business consulting", value: "General business consulting" },
                                     { label: "Other", value: "Other" }
@@ -476,8 +508,14 @@ export default function ProspectProfileComponent() {
                             variant="outline"
                             p={2}
                             placeholder='Enter additional notes'
-                            value={hyperVendorForm.notes}
-                            onChange={e => setHyperVendorForm({ ...hyperVendorForm, notes: e.target.value })}
+                            value={hyperVendorForm.prospect_important_notes?.value}
+                            onChange={ e => setHyperVendorForm( prevState => ({
+                                ...prevState,
+                                prospect_important_notes: {
+                                    ...prevState.prospect_important_notes,
+                                    value: e.target.value
+                                }
+                            }))}
                             border="1px solid #c4c4c4"
                         ></Textarea>
                     </Field>
