@@ -57,11 +57,26 @@ export default function ProspectProfileComponent() {
         prospect_job_title: {
             value: '',
             error: true
-        }
+        },
     })
     
-
     const [hyperVendorForm, setHyperVendorForm] = useState({
+        prospect_phone_number: {
+            value: '',
+            error: true
+        },
+        prospect_important_notes: {
+            value: '',
+            error: true
+        },
+        prospect_frequency: {
+            value: '',
+            error: true
+        },
+        prospect_other_services: {
+            value: '',
+            error: true
+        }
 
     })
 
@@ -76,7 +91,22 @@ export default function ProspectProfileComponent() {
             prospect_id: session_data.id
         })
 
-        console.info( rec )
+
+        setHyperVendorForm( prevState => ({
+            ...prevState,
+            prospect_other_services: {
+                ...prevState.prospect_other_services,
+                value: rec.prospect_other_services
+            },
+            prospect_frequency: {
+                ...prevState.prospect_frequency,
+                value: rec.prospect_frequency
+            },
+            prospect_important_notes: {
+                ...prevState.prospect_important_notes,
+                value: rec.prospect_important_notes
+            }
+        }))
 
         setCompanyInfo( prevState => ({
             ...prevState,
@@ -102,6 +132,7 @@ export default function ProspectProfileComponent() {
             }
         }))
         
+
         setProspectInfo( prevState => ({
             ...prevState,
             prospect_first_name: {
@@ -123,15 +154,16 @@ export default function ProspectProfileComponent() {
         }))
 
     }
-    
-    useEffect( () => {
-        console.info( prospectInfo.prospect_first_name  )
-    }, [ prospectInfo ])
 
     const saveChanges = (ev) => {
         ev.preventDefault()
 
         setSubmitted( true )
+    }
+
+    const getDefaultChecklists = ( defaultList ) => {
+        console.info( 'def list >> ', defaultList)
+        return defaultList.includes(',') ? defaultList.split(',') : [defaultList]
     }
 
     return <Flex w={'100%'}>
@@ -367,6 +399,7 @@ export default function ProspectProfileComponent() {
                             name={'phone_number'}
                             placeholder="Enter your preferred phone number"
                             required
+                            defaultValue={ companyInfo?.prospect_phone_number?.value }
                             isValid={ e => setCompanyInfo( prevState => ({
                                     ...prevState,
                                     prospect_phone_number: {
@@ -391,10 +424,11 @@ export default function ProspectProfileComponent() {
                         <CheckboxList
                             mt={5}
                             header="What type of company (services/products) do you want to have meetings with?"
+                            defaultValues={ getDefaultChecklists( hyperVendorForm?.prospect_other_services?.value ) }
                             items={
                                 [
                                     { label: "Growth Marketing agencies", value: "Growth Marketing agencies" },
-                                    { label: "Recruiting and staffing firms", value: "Recruiting and staffing firms" },
+                                    { label: "Recruiting and staffing firms", value: 'Recruiting_and_staffing_firms' },
                                     { label: "Productivity software or consultants", value: "Productivity software or consultants" },
                                     { label: "Software or SaaS companies", value: "Software or SaaS companies" },
                                     { label: "Business growth software or consultants", value: "Business growth software or consultants" },
@@ -404,14 +438,20 @@ export default function ProspectProfileComponent() {
                                     { label: "Other", value: "Other" }
                                 ]
                             }
-                            getSelectedChoices={e => 
-                                setHyperVendorForm({ ...hyperVendorForm, other_services: e })}
+                            getSelectedChoices={ e => setHyperVendorForm( prevState => ({
+                                ...prevState,
+                                prospect_other_services: {
+                                    ...prevState.prospect_other_services,
+                                    value: e
+                                }
+                            }))}
                         />
 
                     </Flex>
                     <CheckboxList
                         mt={5}
                         header="How frequently would you like to have 30-min demo calls?"
+                        defaultValues={ getDefaultChecklists ( hyperVendorForm?.prospect_frequency?.value )}
                         items={
                             [
                                 { label: "1 per week for $100 Amazon eCard", value: "1 per week for $100 Amazon eCard" },
@@ -419,7 +459,13 @@ export default function ProspectProfileComponent() {
                                 { label: "3 per week for $300 Amazon eCard", value: "3 per week for $300 Amazon eCard" },
                             ]
                         }
-                        getSelectedChoices={e => setHyperVendorForm({ ...hyperVendorForm, frequency: e })}
+                        getSelectedChoices={ e => setHyperVendorForm( prevState => ({
+                            ...prevState,
+                            prospect_frequency: {
+                                ...prevState.prospect_frequency,
+                                value: e
+                            }
+                        }))}
                     />
 
                     <Field

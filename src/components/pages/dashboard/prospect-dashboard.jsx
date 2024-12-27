@@ -3,6 +3,7 @@
 import { Card, Box, Text, Flex, GridItem } from '@chakra-ui/react'
 import { Button } from '@/components/ui/button'
 import { FaRegTimesCircle } from "react-icons/fa";
+import { useState, useEffect } from 'react'
 
 export default function ProspectsDashboard() {
 	const proposals = [
@@ -56,8 +57,33 @@ export default function ProspectsDashboard() {
 			},
 			medium: "Zoom"}
 	]
+	
+	const [ posts, setPosts ] = useState( [] )
+
+	useEffect(() => {
+		fetchAllPosts()
+	}, [])
+
+	const fetchAllPosts = async () => {
+		const rec = await get_all_sales_post()
+		
+		setPosts( rec )
+		console.info( rec )
+	}
+
 	return (
 		<Box w='100%'>
+			{
+				posts.map( post =>
+					<SingleProposal
+						key={post.sales_post_id}
+						link={post.clients.client_company_website}
+						name={post.clients.client_company_name}
+						description={post.clients.client_important_notes}
+						amount={post.clients.client_}
+					/>
+				)
+			}
 			{
 				proposals.map( proposal =>
 					<SingleProposal 

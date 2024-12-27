@@ -2,15 +2,26 @@ import { CheckboxGroup, Fieldset } from "@chakra-ui/react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useState, useEffect } from "react"
 
-export const CheckboxList = ({ items, header, getSelectedChoices, ...rest }) => {
-	const [checkedItems, setCheckedItems] = useState([]);
+export const CheckboxList = ({ 
+	items,
+	header,
+	getSelectedChoices,
+	defaultValues = '',
+	...rest }) => {
+
+	const [checkedItems, setCheckedItems] = useState( [] )
 
 	useEffect(() => {
 		if ( getSelectedChoices ) {
 			getSelectedChoices( checkedItems )
 		}
-		console.info( 'selected choices ?? ', checkedItems )
 	}, [checkedItems])
+
+	useEffect(() => {
+		if (defaultValues.length != 0 && defaultValues[0] != '' && checkedItems.length == 0 ) {
+			setCheckedItems( prevstate => [ ...prevstate, ...defaultValues] )
+		}
+	}, [ defaultValues ])
 
 	const handleCheckboxChange = (e, value) => {
 		if (e.target.checked) {
@@ -23,8 +34,10 @@ export const CheckboxList = ({ items, header, getSelectedChoices, ...rest }) => 
 	return (
 		<Fieldset.Root {...rest}>
 			<CheckboxGroup
-				name="framework">
-
+			    // {...(defaultValues && defaultValues.length > 0 && { value: defaultValues })}
+				value={ checkedItems }
+				name="framework"
+				>
 				<Fieldset.Legend fontSize="sm" mb="2" color="black">
 					{header}
 				</Fieldset.Legend>
