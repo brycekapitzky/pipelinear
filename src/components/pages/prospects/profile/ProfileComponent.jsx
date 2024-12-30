@@ -2,7 +2,6 @@
 
 import { TextField } from "@/components/ui/forms/text-field"
 import { Flex, Card, Textarea, Text, Spinner } from "@chakra-ui/react"
-import { Checkbox } from '@/components/ui/checkbox'
 import { Field } from "@/components/ui/field"
 import { CheckboxList } from '@/components/ui/checkbox-list'
 import { Button } from '@/components/ui/button'

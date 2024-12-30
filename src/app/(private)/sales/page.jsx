@@ -28,7 +28,7 @@ export default async function SalesManagerPage() {
 		}
 
 		if (has_error) {
-			// return redirect('/login/expired')
+			 return redirect('/login/expired')
 		} else {
 			if (user_type && user_type == 'sales') {
 

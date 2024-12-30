@@ -3,7 +3,7 @@
 import {
 	get_all_vendor as get_all_vendors_action
 } from '@/app/api/vendors/actions'
-import { Flex, Input, Text } from "@chakra-ui/react"
+import { Flex, Text } from "@chakra-ui/react"
 import { useState, useEffect } from 'react'
 import { ResizableTable } from "@/components/ui/table";
 

@@ -24,6 +24,20 @@ export const ResizableTable = ({
 		}
 	};
 
+	const getValue = ( value, real_value ) => {
+		if ( real_value ) {
+			return real_value
+		}
+		if ( !value ) {
+			return 'None'
+		}
+		if ( value instanceof Date ) {
+			return Date( value )
+		} else {
+			return value
+		}
+	}
+
 	return (
 		<Box bgColor={'white'} w={'100%'} p={3} borderRadius={2} {...rest}>
 			{
@@ -62,8 +76,11 @@ export const ResizableTable = ({
 														}
 
 														return <Table.Cell key={index}>
-															{
+															{/* {
 																typeof item[column.value] == 'object' ? new Date(item[column.value]).toLocaleString() : real_value
+															} */}
+															{
+																getValue( item[column.value], real_value )
 															}
 														</Table.Cell>
 													}

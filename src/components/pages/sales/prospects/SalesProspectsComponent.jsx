@@ -77,6 +77,7 @@ export default function SalesProspects() {
 					{ label: "Last Name", value: 'prospect_last_name' },
 					{ label: "Full Name", value: 'prospect_full_name' },
 					{ label: "Job title", value: 'prospect_job_title' },
+					{ label: "Status", value: 'prospect_status' },
 				]
 			}
 			editAction={(selectedItem) => update_prospect(selectedItem)}

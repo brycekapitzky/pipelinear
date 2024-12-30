@@ -10,17 +10,20 @@ datasource db {
 model Proposal {
   proposal_id                  String       @id @default(uuid())
   proposal_client_id           String
-  proposal_manager_id          String
-  proposal_client_second_email String
+  proposal_manager_id          String?
+  proposal_client_second_email String?
+  proposal_prospect_id         String
+  proposal_status              String       @default("pending")
   proposal_prospect_paragraph  String
-  clients                      Clients      @relation(fields: [proposal_client_id], references: [client_id])
-  sales_manager                SalesManager @relation(fields: [proposal_manager_id], references: [manager_id])
+  clients                      Clients       @relation(fields: [proposal_client_id], references: [client_id])
+  sales_manager                SalesManager? @relation(fields: [proposal_manager_id], references: [manager_id])
+  prospects                    Prospects     @relation(fields: [proposal_prospect_id], references: [prospect_id])
 }
 
 model SalesPost {
   sales_post_id            String  @id @default(uuid())
-  sales_client_id          String
-  clients                  Clients 	@relation(fields: [sales_client_id], references: [client_id])
+  sales_client_id          String  
+  clients                  Clients @relation(fields: [sales_client_id], references: [client_id])
 }
 
 model Prospects {
@@ -52,6 +55,7 @@ model Prospects {
   prospect_date_submitted      DateTime
   prospect_password_hash       String
   meetings                     Meetings[]
+  proposals                    Proposal[]
 }
 
 model SalesManager {
